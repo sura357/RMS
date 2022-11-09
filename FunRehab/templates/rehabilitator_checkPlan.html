@@ -61,11 +61,20 @@
                 {% for content in sets_content %}
                     {% if set.0 == content.1 %}
                             <!-- href aria-controls=控制對應ID -->
-                        <p data-bs-toggle="collapse" href="#aa{{ content.0 }}" role="button" aria-expanded="false" aria-controls="multiCollapseExample1">動作: {{ content.8 }}</p>
+                        <p data-bs-toggle="collapse" href="#aa{{ content.0 }}" role="button" aria-expanded="false" aria-controls="multiCollapseExample1">動作: {{ content.10 }}</p>
                         <!--<button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#multiCollapseExample2" aria-expanded="false" aria-controls="multiCollapseExample2">Toggle second element</button>
                         <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target=".multi-collapse" aria-expanded="false" aria-controls="multiCollapseExample1 multiCollapseExample2">Toggle both elements</button>-->
                         <div class="collapse multi-collapse" id="aa{{ content.0 }}"> <!-- use id to target -->
-                            hello it's me
+                            {% for sd_content in sd_contents %}
+
+                                {% if sd_content.14 == content.5 %}
+                                    持續時間:{{ sd_content.15 }}<br>
+                                    次數:{{ sd_content.16 }}<br>
+                                    休息時間:{{ sd_content.17 }}<br>
+                                    頂點維持時間:{{ sd_content.18 }}<br>
+                                    類型:{{ sd_content.19 }}<br>
+                                {% endif %}
+                            {% endfor %}
                         </div>
                         <hr size="8px"  width="95%" align="center" class="reto-line">
                     {% endif %}

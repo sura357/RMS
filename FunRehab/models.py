@@ -129,24 +129,12 @@ class PlanSetDetail(models.Model):
         return str(self.id)
 
 
-class RehubRecord(models.Model):
-    sdID = models.OneToOneField(PlanSetDetail, on_delete=models.CASCADE, to_field='id', primary_key=True)
-    accuracy = models.PositiveIntegerField(null=False)
-    times = models.PositiveIntegerField(null=False)
-    duration = models.PositiveIntegerField(null=False)
-    progress = models.PositiveIntegerField(null=False)
-
-    def __str__(self):
-        return str(self.id)
-
-
-class PlanSet(models.Model):
+class PlanSetMotion(models.Model):
+    """
     class Meta:
-        unique_together = (('SetID', 'orders'),)
+        unique_together = (('sdID', 'mID'),)"""
 
     id = models.AutoField(primary_key=True)
-    SetID = models.DateField(max_length=8, null=False)
-    orders = models.PositiveIntegerField(null=False)
     mID = models.ForeignKey(Motion, on_delete=models.CASCADE, to_field='id')
     sdID = models.ForeignKey(PlanSetDetail, on_delete=models.CASCADE, to_field='id')
 
@@ -154,13 +142,28 @@ class PlanSet(models.Model):
         return str(self.id)
 
 
-class PlanSetMotion(models.Model):
+class PlanSet(models.Model):
+    """
     class Meta:
-        unique_together = (('setID', 'mID'),)
+        unique_together = (('SetID', 'orders'),)"""
 
     id = models.AutoField(primary_key=True)
-    mID = models.ForeignKey(Motion, on_delete=models.CASCADE, to_field='id')
-    setID = models.ForeignKey(PlanSetDetail, on_delete=models.CASCADE, to_field='id')
+    SetID = models.DateField(max_length=8, null=False)
+    smID = models.ForeignKey(PlanSetMotion, on_delete=models.CASCADE, to_field='id')
+    # orders = models.PositiveIntegerField(null=False)
+
+    def __str__(self):
+        return str(self.id)
+
+
+class RehubRecord(models.Model):
+    id = models.AutoField(primary_key=True)
+    sid = models.ForeignKey(PlanSet, on_delete=models.CASCADE, to_field='id')
+    # sdID = models.OneToOneField(PlanSetDetail, on_delete=models.CASCADE, to_field='id', primary_key=True)
+    accuracy = models.PositiveIntegerField(null=False)
+    times = models.PositiveIntegerField(null=False)
+    duration = models.PositiveIntegerField(null=False)
+    progress = models.PositiveIntegerField(null=False)
 
     def __str__(self):
         return str(self.id)
@@ -172,6 +175,7 @@ class Plan(models.Model):
 
     id = models.AutoField(primary_key=True)
     planID = models.PositiveIntegerField(null=False)
+    planName = models.CharField(max_length=40, null=True)
     setID = models.ForeignKey(PlanSet, on_delete=models.CASCADE, to_field='id')
     creating_date = models.DateField(max_length=14, null=False)
 
@@ -193,8 +197,10 @@ class PlanCart(models.Model):
 
 
 class MedicalRecord(models.Model):
+    """
     class Meta:
         unique_together = (('rID', 'pID', 'planID'),)
+        """
 
     id = models.AutoField(primary_key=True)
     rID = models.ForeignKey(Rehabilitator, on_delete=models.CASCADE, to_field='id')
@@ -216,6 +222,15 @@ class ContactRecord(models.Model):
     pID = models.ForeignKey(Patient, on_delete=models.CASCADE, to_field='id')
     send_time = models.DateField(max_length=14, null=False)
     content = models.CharField(max_length=200, null=False)
+
+    def __str__(self):
+        return str(self.id)
+
+
+class RehubURL(models.Model):
+    id = models.AutoField(primary_key=True)
+    content = models.CharField(max_length=100, null=False)
+    url = models.CharField(max_length=120, null=False)
 
     def __str__(self):
         return str(self.id)

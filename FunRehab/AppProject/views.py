@@ -256,7 +256,8 @@ def rehabilitator_addPlan(request):
             cursor.execute("SELECT max(planID) "
                            "from AppProject_plan")
             top_planid = cursor.fetchall()  # cursor.fetchone()[0]
-            top_planid = int(top_planid)+1
+            print(top_planid[0][0])
+            top_planidnum = int(top_planid[0][0])+1
 
             for j in range(0, len(sel_date)):
                 temp = 0
@@ -276,18 +277,20 @@ def rehabilitator_addPlan(request):
                     cursor.execute("insert into AppProject_plansetmotion(id, mID_id, sdID_id) "
                                    "VALUES(NULL, '"+set_details_split[i*6]+"',(SELECT last_insert_rowid()))")
 
+                temp_date = sel_date[j][0:4]+"-"+sel_date[j][4:6]+"-"+sel_date[j][6:8]
                 cursor.execute("insert into AppProject_planset(id, SetID, smID_id) "  # orders
-                               "VALUES(NULL, '"+sel_date[j]+"', (SELECT last_insert_rowid()))")  # "+str(temp)+"
+                               "VALUES(NULL, '"+temp_date+"', (SELECT last_insert_rowid()))")  # "+str(temp)+"
 
                 cursor.execute("insert into AppProject_plan(id, planID, creating_date, setID_id, planName) "
                                "VALUES("
                                "NULL, "
-                               ""+top_planid+", "
+                               ""+str(top_planidnum)+", "  
                                "date('now','localtime'), "
-                               "(SELECT last_insert_rowid()), '"+plan_name+"'")
+                               "(SELECT last_insert_rowid()), '"+plan_name+"')")
+            cursor.execute("INSERT INTO AppProject_medicalrecord"
+                           "(id, creating_date, disease, symptom, status, pID_id, planID_id, rid_id, remark)"
+                           "VALUES(NULL, date('now','localtime'), '', '', 0, '" + sel_patient + "', " + str(top_planidnum) + ", '" + rid.id + "', 'aa');")
 
-                cursor.execute("UPDATE AppProject_medicalrecord "
-                               "SET planID_id="+top_planid+" WHERE pID_id='"+sel_patient+"'")
 
         else:
             return redirect('../rehabilitator_CheckPlan/?sel_patient='+sel_patient)
@@ -346,6 +349,15 @@ def rehabilitator_checkPlan(request):
                            " in (SELECT setID_id from AppProject_plan WHERE planID == '"+sel_plan+"')")
             sets_content = cursor.fetchall()  # cursor.fetchone()[0]
             print(sets_content)
+            cursor.execute("select * "
+                           " from AppProject_planset, AppProject_plansetmotion, AppProject_motion, AppProject_plansetdetail "
+                           " where AppProject_planset.smID_id = AppProject_plansetmotion.id "
+                           " and AppProject_plansetmotion.mID_id = AppProject_motion.id "
+                           " and AppProject_plansetmotion.sdID_id = AppProject_plansetdetail.id"
+                           " and AppProject_planset.id"
+                           " in (SELECT setID_id from AppProject_plan WHERE planID == '" + sel_plan + "')")
+            sd_contents = cursor.fetchall()  # cursor.fetchone()[0]
+            print(sd_contents)
 
         #  password = request.POST['cPassword']
     return render(request, "rehabilitator_checkPlan.html", locals())
@@ -497,3 +509,35 @@ def rehabilitator_medicalrecord(request):
     """
 
     return render(request, "rehabilitator_medicalrecord.html", locals())
+
+
+def patient_rehubrecord(request):
+    template = "models/rehabilitatorbase.html"
+    if "raccount" not in request.session:
+        return redirect('../patient_Login')
+    rid = Rehabilitator.objects.get(id=request.session["raccount"])
+    cursor = connection.cursor()
+    cursor.execute("select name , id from AppProject_patient "
+                   "WHERE id=(SELECT pID_id FROM AppProject_medicalrecord WHERE rID_id='" + request.session[
+                       "raccount"] + "')")
+
+    patients = cursor.fetchall()  # cursor.fetchone()[0]
+
+    if request.method != "POST":
+        mess = "表單資料尚未送出.."
+    else:
+        sel_patient = request.POST['sel_patient']
+        records = RehubRecord.objects.filter(pID_id=sel_patient)
+
+        cursor.execute("select distinct * from AppProject_patient "
+                       "WHERE id= '" + sel_patient + "'")
+        sel_patient_name = cursor.fetchall()  # cursor.fetchone()[0]
+    """
+    cursor = connection.cursor()
+    cursor.execute("select name , id from AppProject_patient "
+                   "WHERE id=(SELECT pID_id FROM AppProject_medicalrecord WHERE rID_id='"+request.session["raccount"]+"')")
+
+    patients = cursor.fetchall()  # cursor.fetchone()[0]
+    """
+
+    return render(request, "patient_rehubrecord.html", locals())
