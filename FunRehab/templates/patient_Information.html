@@ -1,0 +1,124 @@
+{% extends template %}
+{% block content %}
+<style type="text/css">
+    *{
+        padding: 0;
+        margin: 0;
+    }
+    html,body{
+        height: 100%;
+        width: 100%;
+    }
+    .rent_data {
+        background-color: #E2F0D9;
+        height: 28%;
+        width: 85%;
+        margin-left: auto;
+        margin-right: 1%;
+        text-align: left;
+        border-radius: 30px;
+        border: none;
+        margin-top: 0.5%;
+    }
+    .user_data {
+        background-color: #B4C7E7;
+        height: 38%;
+         width: 85%;
+        margin-right: 1%;
+        margin-left: auto;
+        text-align: left;
+        border-radius: 30px;
+        border: none;
+        margin-top: 0.5%;
+    }
+    .user_data_button {
+        width: 100%;
+        margin-left: auto;
+        margin-right: auto;
+        text-align: right;
+        border-radius: 30px;
+        border: none;
+
+    }
+    .Button {
+        text-align: center;
+        font-family: "微軟正黑體";
+        font-weight: bold;
+        font-size: 30px;
+        border-radius: 20px;
+        border: none;
+        outline: none;
+        width: 10%;
+        height: 60px;
+        margin-top: 5%;
+        background-color: #7882EF;
+        transition: all .3s linear;
+        margin-right: 2%;
+    }
+    .Button:hover{
+        background-color: #0858D4;
+    }
+    .Button:active{
+        background-color: #67C8FF;
+    }
+    .web_title  {
+        font-size: 50px;
+        font-weight: bold;
+        margin-top: 0.5%;
+        margin-left: 12%;
+
+    }
+    .main-container{
+     position: absolute;
+
+     height: 87%;
+     width: 90%;
+     margin-left: 10%;
+     margin-top: 1%;
+    }
+    .lab{
+        margin-left: 1.5%;
+        font-family: "微軟正黑體";
+        font-size: 30px;
+        font-weight: bold;
+
+    }
+    .input {
+        text-align: center;
+        font-family: "微軟正黑體";
+        font-weight: bold;
+        font-size: 30px;
+        border-radius:35px;
+        border:none;
+        outline: none;
+    }
+    </style>
+    <div class="main-container">
+		<article class="web_title">基本資料</article>
+
+
+		<article class="user_data">
+			<div class="lab">
+				姓名：{{ patient.0 }}<br>
+				生日：{{ patient.3 }}<br>
+				電話：{{ patient.1 }}<br>
+				Email：{{ patient.2 }}
+			</div>
+			<!--<div class="user_data_button">
+				<input type="button" value="儲存" class="Button">
+			</div>-->
+		</article>
+        <article class="rent_data">
+			<div class="lab">
+				租用設備：{{ kinect.0 }}號機<br>
+				起租日期：{{ time }} (租借時長：{{ kinect.2 }}個月)<br>
+                狀態：
+                {% if kinect.3 == 0 %}
+                    未歸還
+                {% else %}
+                    已歸還
+                {% endif %}
+			</div>
+		</article>
+</div>
+{% endblock %}

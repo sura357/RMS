@@ -1,0 +1,44 @@
+{% extends 'models/base.html' %}
+{% block title %}<title>顯示所有資料</title>{% endblock %}
+
+{% block content %}
+	<h1>你好!{{myuser.cName}}</h1>
+	<h2>現在時間是{{now}}</h2>
+	<h2>顯示本帳號中的所有資料</h2>
+	<table>
+		<th>編號</th>
+		<th>姓名</th>
+		<th>帳號</th>
+		<th>密碼</th>
+		<th>性別</th>
+		<th>生日</th>
+		<th>電子郵件</th>
+		<th>電話</th>
+		<th>地址</th>
+		<tr>
+			<td>{{myuser.id}}</td>
+			<td>{{myuser.cName}}</td>
+			<td>{{myuser.cAccount}}</td>
+			<td>{{myuser.cPassword}}</td>
+			<td>{{myuser.cSex}}</td>
+			<td>{{myuser.cBirthday}}</td>
+			<td>{{myuser.cEmail}}</td>
+			<td>{{myuser.cPhone}}</td>
+			<td>{{myuser.cAddr}}</td>
+		</tr>
+	
+	</table>
+	
+	<form action="/modifyuser/" method="POST" name="form1">
+		{% csrf_token %}
+		<div>
+		<input type="submit"  value="Send" />
+		<input type="button"  value="Delete.." onclick="location.href='../deleteuser/{{myuser.id}}'" /></br>
+		<input type="button"  value="LogOut.." onclick="location.href='../logout'" /></br>
+		</div>
+		
+		<div>
+		接收到的資料:{{mess}}
+		</div>
+	</form>
+{% endblock %}

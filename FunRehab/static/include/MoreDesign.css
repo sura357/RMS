@@ -1,0 +1,183 @@
+@charset "utf-8";
+/* CSS Document */
+
+body{
+	font-family: "微軟正黑體";
+}
+.scrollbar-style::-webkit-scrollbar-track {
+	background-color: #F2F2F2;
+	border-radius: 20px;
+	width: 20px;
+}
+.scrollbar-style::-webkit-scrollbar {
+ 	background-color: black;
+	border-radius: 20px;
+	width: 20px;
+}
+.scrollbar-style::-webkit-scrollbar-thumb {
+  	background-color: #ADB9CA;
+	border-radius: 100px;
+}
+
+.in-main-explain{
+    font-size: x-large;
+    border-radius: 20px;
+    margin-left: 40pt;
+    text-align: left;
+    line-height: 30px;
+    text-indent: 40px;
+    font-weight: bold;
+    width: 90%;
+    height: 180px;
+    float: left;
+    background-color: #C5E0B4;
+}
+.in-main-explain-lease{
+    font-size: x-large;
+    border-radius: 20px;
+    margin-left: 40pt;
+    margin-top: 80px;
+    text-align: left;
+    line-height: 65px;
+    text-indent: 40px;
+    font-weight: bold;
+    width: 90%;
+    height: 475px;
+    background-color: #C5E0B4;
+}
+.in-main-explain-lease-content{
+    font-size: x-large;
+    border-radius: 20px;
+    margin-left: 40pt;
+    text-align: left;
+    line-height: 65px;
+    text-indent: 40px;
+    font-weight: bold;
+    width: 40%;
+    height: 70%;
+	float: left;
+    background-color: #FBE5D6;
+  
+}
+.in-main-explain-lease-content-bar{
+    font-size: x-large;
+    border-radius: 10px;
+	 margin-top: 10pt;
+    margin-left: 10pt;
+    text-align: left;
+    line-height: 80px;
+    text-indent: 40px;
+    font-weight: bold;
+    width: 93%;
+    height: 80px;
+	float: left;
+    background-color: #F4B183;
+}
+
+.in-main-explain-lease-content-bar-selected{
+    border: 2pt dashed rgba(255,0,0,1.00)
+}
+
+.in-main-explain-lease-content-bar-patient{
+    font-size: x-large;
+    border-radius: 10px;
+    margin-top: 10pt;
+    margin-left: 10pt;
+    text-align: left;
+    line-height: 80px;
+    text-indent: 40px;
+    font-weight: bold;
+    width: 93%;
+    height: 80px;
+	float: left;
+    background-color: #F4B183;
+}
+
+.in-main-explain-lease-content-bar-patient-selected{
+    border: 2pt dashed rgba(255,0,0,1.00)
+}
+
+.in-main-search{
+    font-size: x-large;
+    border-radius: 80px;
+    margin-left: 40pt;
+    text-align: left;
+    line-height: 65px;
+    text-indent: 40px;
+    font-weight: bold;
+    width: 95%;
+    height: 65px;
+    float: left;
+    background-color: #C5E0B4;
+}
+
+.in-main-search-button{
+    font-size: x-large;
+    border-radius: 20px;
+   	border-style: none;
+	
+	border-color: transparent;
+    text-align: center;
+    line-height: 65px;
+    font-weight: bold;
+    width: 65px;
+    height: 65px;
+    float: left;
+    background-color: #A9D18E;	
+}
+.in-main-caption-bar{
+    font-size: x-large;
+    border-radius: 80px;
+    margin-left: 40pt;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    text-align: center;
+    line-height: 65px;
+    text-indent: 40px;
+    font-weight: bold;
+    width: 90%;
+    #height: 65px;
+    background-color: #B4C7E7;
+   
+}
+
+.in-main-content-bar{
+    font-size: x-large;
+    border-radius: 80px;
+    margin-left: 40pt;
+    margin-top: 20px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    text-align: center;
+    line-height: 65px;
+    text-indent: 50px;
+    width: 90%;
+    #height: 90px;
+    padding: 10px;
+    background-color: #B4C7E7;
+}
+.in-main-notice{
+	font-size: x-large;
+    border-radius: 80px;
+     margin-left: 40pt;
+    text-align: left;
+    
+    width: 90%;
+    height: 500px;
+    padding: 10px;
+    background-color: #B4C7E7;	
+}
+.in-main-notice-button{
+    font-size: x-large;
+    border-radius: 20px;
+	margin-right: 60px; 
+	margin-top: 10px;
+	float: right; 
+	width: 100px;
+	height: 50px;
+    text-align: center;
+    line-height: 25px;
+	border: none;
+    font-weight: bold;
+    background-color: #A9D18E;	
+}

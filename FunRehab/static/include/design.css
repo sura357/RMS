@@ -1,0 +1,139 @@
+@charset "utf-8";
+/* CSS Document */
+
+body{
+	font-family: "微軟正黑體";	
+}
+
+/*all*/
+/*垂直居中*/
+.verticalCenter{
+    display: flex;
+    align-items:center;
+    height: 100%;
+}
+/*水平居中*/
+.horizaCenter{
+    display: flex;
+    justify-content:center;
+    text-align: center;
+    width: 100%;
+}
+/*all*/
+
+/*main-strat*/
+.in-main{
+	height: 100%;
+    width: 79%;
+    margin-left: 20%;
+}
+
+.main-container{
+	position: absolute;
+	
+	height: 87%;
+	width: 79%;
+	margin-left: 1%;
+	margin-top: 1%;
+}
+
+.title{
+    font-size: 28pt;	
+	font-weight: bold;
+	width: 95%;
+	height: 10%;
+	margin-top: 1%;
+	margin-left: 2%;
+}
+
+.subtitle{
+    font-size: 22pt;
+	font-weight: bold;
+	width: 95%;
+	height: 10%;
+	margin-top: 1%;
+	margin-left: 2%;
+}
+/*main-end*/
+
+
+
+/*nav-start*/
+.navbar{
+    background-color: #D6DCE5;
+    width: 20%;
+    height: 100%;
+	display: inherit;
+	min-width: 200px;
+	min-height: 400px;
+}
+
+.navbar-nav{
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+    display: inherit;
+	height: 100%;
+}
+
+.navbar-brand{
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+}
+
+.nav-link{
+    color: #000000;
+    font-size: 24pt;
+    font-weight: bold;
+}
+
+.nav-information{
+    font-size: 14pt;
+    font-weight: bold;
+    display: inherit;
+	height: 100px;
+}
+
+.nav-solid{
+    border-top: 2pt solid #3F6EC3;
+    border-radius: 10px;
+    height: 4.5pt;
+    width: 225px;
+    background-color: #3F6EC3;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.nav-top{
+	height: 90%;
+}
+
+.nav-choose-word{
+	color: red;
+}
+
+.nav-rehabilitation{
+    background-color: #B4C7E7;
+    border-radius: 50px;
+    width: 80%;	
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.btn-primary{
+    position: relative;
+    top: 50%;
+    left: 80%;
+    background-color: rgba(0,0,0,0.00) !important;
+    border-style: hidden;
+   box-shadow: 0px 0px rgba(0,0,0,0.00);
+}
+
+.btn-primary:visited:focus:hover{
+    background-color: rgba(255,255,255,0.3) !important;
+    border-style: hidden;
+	box-shadow: 0px 0px rgba(0,0,0,0.00);
+}
+/*nav-end*/
+

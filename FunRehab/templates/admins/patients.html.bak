@@ -1,0 +1,53 @@
+{% extends template %}
+{% block title %}<title>顯示所有患者</title>{% endblock %}
+{% load static %}
+{% block content %}
+	<h1>你好!{{myuser}}</h1>
+	<h2>現在時間是{{now}}</h2>
+	<h2>顯示所有患者</h2>
+	
+	<div>
+		<div>
+			<div>
+				<table class="table table-striped">
+				  <thead>
+				  <tr>
+					<th>編號</th>
+					<th>姓名</th>
+					<th>操作</th>
+				  </tr>
+				  </thead>
+					  
+				  <tbody>
+				  {% for patient in patients %}
+					  <tr>
+						<th scope="row">{{patient.id}}</th>
+						<td>{{patient.name}}</td>
+						<td>
+							<form action="/patient_view/" method="POST">
+							{% csrf_token %}
+							<input type="submit" name="view" value="檢視.." />
+							<input type="hidden" name="id" value="{{patient.id}}" />
+							</form>
+							
+							<form action="/plan_edit/" method="POST">
+							<input type="submit" name="edit" value="編輯復健計畫.." />
+							<input type="hidden" name="id" value="{{patient.id}}" />
+							</form>
+							
+							<form action="/patient_register/" method="POST">
+							<input type="submit" name="register" value="註冊.." />
+							<input type="hidden" name="id" value="{{patient.id}}" />
+							</form>		
+						</td>
+					  </tr>
+					  {% endfor %}
+					</tbody>
+				</table>
+				<div>
+					接收到的資料:{{mess}}
+				</div>
+			</div>
+		</div>
+	</div>
+{% endblock %}

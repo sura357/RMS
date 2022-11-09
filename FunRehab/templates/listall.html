@@ -1,0 +1,32 @@
+<html>
+<head>
+	<meta charset='utf-8'>
+	<title> Test Datalist</title>
+</head>
+<body>
+	<h1>你好!</h1>
+	<h2>現在時間是{{now}}</h2>
+	<h2>顯示Test資料表中的所有資料</h2>
+	<table>
+		<th>編號</th>
+		<th>姓名</th>
+		<th>性別</th>
+		<th>生日</th>
+		<th>電子郵件</th>
+		<th>電話</th>
+		<th>地址</th>
+		{% for test in tests %}
+		<tr>
+			<td>{{test.id}}</td>
+			<td>{{test.cName}}</td>
+			<td>{{test.cSex}}</td>
+			<td>{{test.cBirthday}}</td>
+			<td>{{test.cEmail}}</td>
+			<td>{{test.cPhone}}</td>
+			<td>{{test.cAddr}}</td>
+		</tr>
+		{% endfor %}
+	
+	</table>
+</body>
+</html>

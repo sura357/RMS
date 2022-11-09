@@ -1,0 +1,447 @@
+{% extends template %}
+{% load static %}
+{% block content %}
+<main class="in-main">
+	<div class="title">
+		復健紀錄
+	</div>
+    <div style="font-size: 18pt;font-weight: bold;width: 95%;height: 5%;margin-left: 2%;">
+        {% if sel_patient != null %}
+            目前正在為 {{ sel_patient_name.0.2 }} 新增復健計畫
+        {% endif %}
+    </div>
+<input class="reto-btn-patient" type="button" value="回到查詢復健計畫" onclick="location.href='../rehabilitator_CheckPlan?sel_patient={{ sel_patient }}'" >
+<!--
+<form method="get" action="../rehabilitator_addPlan/">
+	<div>
+
+		% csrf_token %}
+            <select name="sel_patient" class="reto-input-patient reto-div-select">
+                <option value=""> 選擇病患</option>
+                % for patient in patients %}
+                <option value="{ patient.1 }}"> { patient.0 }}</option>
+                % endfor %}
+            </select>　
+		<input id="patientBtn" class="reto-btn-patient" type="submit" value="選擇病患"/>
+
+    </div>
+</form>-->
+	<div class="main-container reto-project">
+		<article class="monthly-left reto-left"  id="div1">
+			<div class="reto-p">
+				<p class="reto-block">計畫名稱</p>
+				<input id="planName" class="reto-input-patient reto-block reto-input-project" type="text" />
+			</div>
+			<div class="reto-p">
+				<p>復健時間</p>
+                <!--
+                <video id="TheNightNightShow" width="750" >
+                <source src="{% static "sample_vids/StandUpComedy.mp4" %}" type="video/mp4" />
+                </video>
+                <br />
+                <input type="button" value="Play/Stop" onclick="MusicControl('start');" />
+                -->
+			</div>
+			<div class="reto-monthly">
+			<!-- 月曆 -->
+			<script>
+				var today = new Date();
+				var presetDate = 
+								{
+									year: today.getFullYear(),
+									month: today.getMonth()+1,  // 取出為上一個月 所以+1
+								};
+				var selectingDate = 
+								{
+									year: today.getFullYear(),
+									month: today.getMonth()+1,  // 取出為上一個月 所以+1
+									day: today.getDate(),
+								};
+				var selectedDate = [];
+				var model = false;  // 模式 (true->一般使用者, false->復健師)
+				monthly_print(false);  // 打印 月曆 html  // (true->使用者, false->復健師)
+			</script>
+			</div>
+		</article>
+			<div  class="reto-solid reto-block">
+			</div>
+			<article  class="monthly-right reto-right " id="style-scrollbar">
+                <select class='reto-div-input reto-div-select' id="sel_dates">
+                </select>
+				<ul id="actionGather">
+				<!-- 在最後呼叫新增動作事件 -->	
+				</ul>
+				<button id="addBtn" class="reto-add "><p class="horizaCenter">+</p></button>
+				<input id="saveBtn" class="reto-save" type="submit" value="存檔"/>
+			</article>
+		</div>
+</main>
+<footer> </footer>
+	
+</body>
+</html>
+
+<!-- 月曆事件 -->
+<script src="{% static "include/monthlyEvent.js" %}"></script>
+<!-- 新增動作事件 -->
+<!--<script src="{% static "include/newAction.js" %}"></script> -->
+ <script>
+
+ // JavaScript Document
+
+// 宣告---
+var action =
+	{
+		name: "",     // 動作名稱
+		duration: 0,  // 次數
+		bread: 0,     // 休息時間
+		ontop: 0,     // 頂點維持時間
+		type: 0,      // 動作類型
+		motion: 0,    // 動作花費時間
+	};
+var saveAction = [];  // 存檔action(array)  // 放置 action
+var presetAction =
+    [
+    {% for motion in motions %}
+        "{{ motion.name }}",
+    {% endfor %}
+    ];// 動作有哪些
+var Action_amount={}; // 準備新增的動作量
+var set_detail= [];
+
+var planName = document.getElementById("planName");  // 計畫名稱
+var patient = document.getElementById("patient");  // 病患
+var actionGather = document.getElementById("actionGather");  // 動作集合
+var addBtn = document.getElementById("addBtn");  // 新增按鈕
+var saveBtn = document.getElementById("saveBtn");  // 存檔按鈕
+// var patientBtn = document.getElementById("patientBtn");  // 選擇病患按鈕
+var sel_date =  document.getElementById("sel_dates");
+var last_date;
+
+var Play=0;
+
+// 函式---
+ function test(event){
+     console.log("fuck me");
+     $('.oof').append('<video class="div-to-display" id="TheNightNightShow" width="750" > ' +
+                    '<source src="{% static "sample_vids/StandUpComedy.mp4" %}" type="video/mp4" /> " + </video>');;
+ }
+
+ function MusicControl(x){
+	if(x=='start'&&Play==0){
+		Play=1;
+		document.getElementById("TheNightNightShow").play();
+	}else if(x=='start'&&Play==1){
+		Play=0;
+		document.getElementById("TheNightNightShow").pause();
+	}
+}
+
+function clear_action()  // 清空動作
+{
+	actionGather.innerHTML = "";
+}
+
+function stringToHTML(str)  // 字串轉html
+{
+	var dom = document.createElement('div');
+	dom.innerHTML = str;
+	return dom;
+}
+
+function add_action(html)  // 加入動作html
+{
+	var node = stringToHTML(html);
+	actionGather.appendChild(node);
+}
+
+function return_action(selectName, printdata)  // 回傳動作字串 // 動作名稱(array)
+{
+    console.log("Action_amount["+sel_date.value+"]"+Action_amount[sel_date.value]);
+    console.log(printdata)
+    console.log(typeof (Action_amount[sel_date.value]))
+    console.log(printdata && Action_amount[sel_date.value]==0);
+    if(printdata && Action_amount[sel_date.value]==0)
+        return null;
+
+    console.log("I'm in");
+    if(printdata)
+    {
+        var actionHtml="";
+        console.log(set_detail[selectedDate.indexOf(sel_date.value)].length);
+            for(var j=0;j<set_detail[selectedDate.indexOf(sel_date.value)].length;j++)
+            {
+                actionHtml += "<li class='reto-div horizaCenter' id='"+sel_date.value+j+"'>\
+					<div class='reto-poject-p'>\
+						<p>動作名稱</p>\
+						<p>動作次數</p>\
+						<p>休息時間</p>\
+						<p>維持時間</p>\
+						<p>動作類型</p>\
+						<p>動作花費時間</p>\
+					</div>\
+					<div class='reto-poject-in'>\
+						<p class='reto-poject-p-div'>\
+						<select class='reto-div-input reto-div-select oof' id='"+sel_date.value+"name"+j+"' onmouseenter='test(this)'>";
+
+                for(var i=0;i<selectName.length;i++) {
+                    console.log(selectName[i])
+                    console.log(set_detail[selectedDate.indexOf(sel_date.value)][j][0]);
+                    if (set_detail[selectedDate.indexOf(sel_date.value)][j][0] == i) {
+                        actionHtml = actionHtml + "<option value=" + (i+1) + " selected='selected'>" + selectName[i] + "</option>"
+                    } else {
+                        actionHtml = actionHtml + "<option value=" + (i+1) + ">" + selectName[i] + "</option>";
+                    }
+                }
+                 actionHtml = actionHtml + "</select>\
+                            </p>\
+                            <p class='reto-poject-p-div'><input class='reto-div-input' type='text' value='"+set_detail[selectedDate.indexOf(sel_date.value)][j][1]+"' id='"+sel_date.value+"times"+j+"'/></p>\
+                            <p class='reto-poject-p-div'><input class='reto-div-input' type='text' value='"+set_detail[selectedDate.indexOf(sel_date.value)][j][2]+"' id='"+sel_date.value+"breadtime"+j+"'/></p>\
+                            <p class='reto-poject-p-div'><input class='reto-div-input' type='text' value='"+set_detail[selectedDate.indexOf(sel_date.value)][j][3]+"' id='"+sel_date.value+"duration"+j+"'/></p>\
+                            <p class='reto-poject-p-div'><input class='reto-div-input' type='text' value='"+set_detail[selectedDate.indexOf(sel_date.value)][j][4]+"' id='"+sel_date.value+"type"+j+"'/></p>\
+                            <p class='reto-poject-p-div'><input class='reto-div-input' type='text' value='"+set_detail[selectedDate.indexOf(sel_date.value)][j][5]+"' id='"+sel_date.value+"motion_time"+j+"'/></p>\
+                        </div>\
+                    </li>";
+            }
+        }
+    else
+    {
+        var actionHtml = "<li class='reto-div horizaCenter' id='"+sel_date.value+Action_amount[sel_date.value]+"'>\
+					<div class='reto-poject-p'>\
+						<p>動作名稱</p>\
+						<p>動作次數</p>\
+						<p>休息時間</p>\
+						<p>維持時間</p>\
+						<p>動作類型</p>\
+						<p>動作花費時間</p>\
+					</div>\
+					<div class='reto-poject-in'>\
+						<p class='reto-poject-p-div'>\
+						<select class='reto-div-input reto-div-select' id='"+sel_date.value+"name"+Action_amount[sel_date.value]+"' >";
+
+
+        for(var i=0;i<selectName.length;i++)
+        {
+            console.log(selectName[i])
+
+            actionHtml = actionHtml + "<option value="+(i+1)+">" + selectName[i] + "</option>";
+        }
+
+            actionHtml = actionHtml + "</select>\
+                                    </p>\
+                                    <p class='reto-poject-p-div'><input class='reto-div-input' type='text' id='"+sel_date.value+"times"+Action_amount[sel_date.value]+"'/></p>\
+                                    <p class='reto-poject-p-div'><input class='reto-div-input' type='text' id='"+sel_date.value+"breadtime"+Action_amount[sel_date.value]+"'/></p>\
+                                    <p class='reto-poject-p-div'><input class='reto-div-input' type='text' id='"+sel_date.value+"duration"+Action_amount[sel_date.value]+"'/></p>\
+                                    <p class='reto-poject-p-div'><input class='reto-div-input' type='text' id='"+sel_date.value+"type"+Action_amount[sel_date.value]+"'/></p>\
+                                    <p class='reto-poject-p-div'><input class='reto-div-input' type='text' id='"+sel_date.value+"motion_time"+Action_amount[sel_date.value]+"'/></p>\
+                                </div>\
+                            </li>";
+    }
+
+	return actionHtml;
+}
+
+// 事件---
+ /*
+patientBtn.addEventListener('click',function(event){  // 選擇病患
+	patientID = patient.value;
+	console.log("選擇病患: ", PatientID);
+},false);*/
+
+addBtn.addEventListener('click',function(event){  // 新增
+	var actionHtml = return_action(presetAction,false);
+	add_action(actionHtml);
+	Action_amount[sel_date.value]++;
+    console.log("Action_amount:"+Action_amount);
+	console.log("新增空動作");
+    if (last_date==null)
+	    last_date=sel_date.value;
+},false);
+
+sel_date.addEventListener('change',function(event){  // 新增
+    console.log(last_date);
+    set_detail[selectedDate.indexOf(last_date)]=[];
+    //console.log(Action_amount[last_date]);
+    for(var i=0;i<Action_amount[last_date];i++){
+        set_detail[selectedDate.indexOf(last_date)][i] = [
+                document.getElementById(last_date+"name"+i).value,
+                document.getElementById(last_date+"times"+i).value,
+                document.getElementById(last_date+"breadtime"+i).value,
+                document.getElementById(last_date+"duration"+i).value,
+                document.getElementById(last_date+"type"+i).value,
+                document.getElementById(last_date+"motion_time"+i).value,
+        ];
+        //console.log(last_date+i);
+        //-----刪除新增動作的框架
+        $("#"+last_date+i).remove();
+    }
+
+    var actionHtml = return_action(presetAction, true);
+	add_action(actionHtml);
+
+    //console.log(Action_amount);
+	console.log("恢復動作清單");
+	last_date=sel_date.value;
+	console.log("set_detail"+set_detail);
+
+},false);
+
+/*
+saveBtn.addEventListener('click',function(event){  // 存檔
+
+	console.log("存檔");
+},false);*/
+
+$('#saveBtn').click(function () {
+    console.log("存檔");
+    console.log("planName"+planName.value)
+
+    console.log(Action_amount[sel_date.value]);
+    set_detail[selectedDate.indexOf(sel_date.value)]=[];
+    for (var i = 0 ; i < Action_amount[sel_date.value] ; i++ ) {
+        set_detail[selectedDate.indexOf(sel_date.value)][i] = []
+        set_detail[selectedDate.indexOf(sel_date.value)][i] = [
+                document.getElementById(sel_date.value+"name"+i).value,
+                document.getElementById(sel_date.value+"times"+i).value,
+                document.getElementById(sel_date.value+"breadtime"+i).value,
+                document.getElementById(sel_date.value+"duration"+i).value,
+                document.getElementById(sel_date.value+"type"+i).value,
+                document.getElementById(sel_date.value+"motion_time"+i).value
+        ];
+        console.log(set_detail[selectedDate.indexOf(sel_date.value)][i]);
+        console.log("i:"+i+"+setdetail"+set_detail[selectedDate.indexOf(sel_date.value)][i]);
+    };
+
+    console.log(set_detail[selectedDate.indexOf(sel_date.value)][0])
+    console.log(set_detail[selectedDate.indexOf(sel_date.value)])
+    console.log("Actions"+set_detail);
+
+    /*var timeoutID = setTimeout(myAlert, 5000);
+
+    function myAlert() {
+        alert('五秒鐘到了！');
+    }"*/
+    //console.log(aa);
+    $.ajax({
+        type: 'GET',
+        url: '/rehabilitator_addPlan',
+        data: {'sel_patient': '{{sel_patient}}','selectedDate[]':selectedDate,'set_detail[]':set_detail,'planName':planName.value}
+    });
+});
+
+ </script>
+
+<script>
+function upMonthlyData(preset, selecting, selected, model)  // 更新月曆  // 本月, 選取中, 有資料, 模式 (true->一般使用者, false->復健師)
+{
+	var monthDays = [31, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31, 31];  // 12 <- 1~12 -> 1  共 14個
+	var mon = [12, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 1];
+	
+	if ( ((preset.year % 4 == 0) && (preset.year % 100 != 0)) || (preset.year % 400 == 0) )  // 閏年
+		monthDays[2] = 29;
+	
+	var monInWeek = new Date(preset.year, mon[preset.month-1], 1);
+	var weekDay = monInWeek.getDay();  // 取今年今月1日星期
+	var days = document.getElementsByClassName("monthly-btn");
+	var time = "";
+	var timdID = "";
+
+	//改變顯示的一般日曆設為老人曆
+	weekDay--;
+
+	//中間段，當月
+	for (var i = 0; i < monthDays[preset.month]; i++)
+	{
+		days[weekDay + i].value = (i+1);
+		days[weekDay + i].className = "monthly-btn" + ((model == false) ? (" reto-monthly-btn") : (""));
+		
+		time = zeroToStr(preset.year) + zeroToStr(mon[preset.month]) + zeroToStr(i+1);
+		timdID = zeroToStr(preset.year) + "-" + zeroToStr(mon[preset.month]) + "-" + zeroToStr(i+1);
+		days[weekDay + i].id= timdID;
+		
+		for (var j = 0; j < selected.length;j++)
+		{
+			if (time == selected[j])
+			{
+				days[weekDay + i].className = days[weekDay + i].className + " monthly-btn-selected";	
+				break;
+			}
+		}
+
+		if (selecting.year == preset.year && selecting.month == mon[preset.month] && selecting.day == i+1)
+				days[weekDay + i].className = days[weekDay + i].className + ((model == false) ? (" reto-btn-selecting") : (" monthly-btn-selecting"));
+	}
+	
+	//上個月
+	for (var i = (weekDay-1), day = monthDays[preset.month-1]; i >=0; i--, day--)
+	{
+		days[i].value = day;
+		days[i].className = "monthly-btn" + ((model == false) ? (" reto-btn-not") : (" monthly-btn-not")) + ((model == false) ? (" reto-monthly-btn") : (""));
+		
+		time = zeroToStr(preset.year) + zeroToStr(mon[preset.month-1]) + zeroToStr(day);
+		timdID = zeroToStr(preset.year) + "-" + zeroToStr(mon[preset.month-1]) + "-" + zeroToStr(day);
+		days[i].id= timdID;
+		
+		for (var j = 0; j < selected.length;j++)
+		{
+			if (time == selected[j])
+			{
+				days[i].className = days[i].className + " monthly-btn-selected";	
+				break;
+			}
+		}
+		
+		if (selecting.year == preset.year && selecting.month == mon[preset.month-1] && selecting.day == day)
+			days[i].className = days[i].className + ((model == false) ? (" reto-btn-selecting") : (" monthly-btn-selecting"));
+	}
+	
+	
+	
+	//下個月
+	for (var i = monthDays[preset.month] + weekDay, day = 1; i < days.length; i++, day++)
+	{
+		days[i].value = day;
+		days[i].className = "monthly-btn" + ((model == false) ? (" reto-btn-not") : (" monthly-btn-not")) + ((model == false) ? (" reto-monthly-btn") : (""));
+		
+		time = zeroToStr(preset.year) + zeroToStr(mon[preset.month+1]) + zeroToStr(day);
+		timdID = zeroToStr(preset.year) + "-" + zeroToStr(mon[preset.month+1]) + "-" + zeroToStr(day);
+		days[i].id= timdID;
+		
+		for (var j = 0; j < selected.length;j++)
+		{
+			if (time == selected[j])
+			{
+				days[i].className = days[i].className + " monthly-btn-selected";	
+				break;
+			}
+		}
+		
+		if (selecting.year == preset.year && selecting.month == mon[preset.month+1] && selecting.day == day)
+			days[i].className = days[i].className + ((model == false) ? (" reto-btn-selecting") : (" monthly-btn-selecting"));
+	}
+}
+
+function zeroToStr(num)  // 補0
+{
+	return (num < 10) ? ("0" + num.toString()):(num.toString());
+}
+
+function getMonthName(month)  // 取 英文簡寫月份
+{
+  if (month == 1) return "Jan";
+  if (month == 2) return "Feb";
+  if (month == 3) return "Mar";
+  if (month == 4) return "Apr";
+  if (month == 5) return "May";
+  if (month == 6) return "June";
+  if (month == 7) return "July";
+  if (month == 8) return "Aug";
+  if (month == 9) return "Sept";
+  if (month == 10) return "Oct";
+  if (month == 11) return "Novr";
+  if (month == 12) return "Dec";
+}
+</script>
+<script>
+	upMonthlyData(presetDate, selectingDate, selectedDate, model);  // 更新月曆  // 本年本月(object), 選取中(object), 有資料(array), 模式(bool)</script>
+{% endblock %}

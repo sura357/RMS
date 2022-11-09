@@ -1,0 +1,25 @@
+{% extends template %}
+{% block title %}<title>功能頁</title>{% endblock %}
+{% load static %}
+{% block content %}
+	<h1>你好!{{myuser.cName}}</h1>
+	<h2>現在時間是{{now}}</h2>
+	<h2>顯示所有商品</h2>
+	
+	<div class="row row-cols-1 row-cols-sm-2 row-cols-md-4 g-3">
+	<div class="col">
+		<div class="card" style="width: 18rem;">
+			<img src="{% static pics/setting.png %}" class="card-img-top" alt="...">
+			  <div class="card-body">
+				<h5 class="card-title">{{product.pName}}</h5>
+				<p class="card-text">{{ product.pMessage }}</p>
+				
+				<a href="/product_detail/{{product.id}}" class="btn btn-primary">進去看看</a>
+			  </div>
+			</div>
+
+	</div>
+	
+	{% endfor %}
+	</div>
+{% endblock %}

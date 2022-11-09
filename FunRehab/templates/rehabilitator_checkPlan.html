@@ -1,0 +1,111 @@
+{% extends template %}
+{% load static %}
+{% load AppProject_extras %}
+
+{% block content %}
+<main class="in-main">
+	<div class="title">
+		復健紀錄
+	</div>
+    <div style="font-size: 18pt;font-weight: bold;width: 95%;height: 5%;margin-left: 2%;">
+        {% if sel_patient != null or sel_plan != null %}
+            目前顯示的資料為: {{ sel_patient_name.0.2 }}
+            {% if sel_plan != null %}
+                的 復健計畫ID {{ sel_plan }}
+            {% endif %}
+        {% endif %}
+    </div>
+
+	<div>
+        <form method="get" action="../rehabilitator_CheckPlan/">
+        {% csrf_token %}
+            <select name="sel_patient" class="reto-input-patient reto-div-select" onChange="this.form.submit();">
+                <option value=""> 選擇病患</option>
+                {% for patient in patients %}
+                    {% if sel_patient == patient.1 %}
+                        <option value="{{ patient.1 }}" selected="selected"> {{ patient.0 }}</option>
+                    {% else %}
+                        <option value="{{ patient.1 }}"> {{ patient.0 }}</option>
+                    {% endif %}
+                {% endfor %}
+            </select>　　
+
+            <select name="sel_plan" class="reto-input-patient reto-div-select" onChange="this.form.submit();">
+                {% if plans == null %}
+                    <option value="">無復健計畫 !</option>
+                {% else %}
+                    <option value="">選擇計畫</option>
+                {% endif %}
+
+                {% for plan in plans %}
+                    {% if sel_plan ==  plan.id  %}
+                        <option value="{{ plan.id }}" selected="selected" > {{ plan.id }}</option>
+                    {% else %}
+                        <option value="{{ plan.id }}" > {{ plan.id }}</option>
+                    {% endif %}
+                {% endfor %}
+            </select>　　
+            <input class="reto-btn-patient" type="button" value="新增復健計畫" onclick="location.href='../rehabilitator_addPlan/?sel_patient={{ sel_patient }}'" >
+        </form>
+	</div>
+	<div class="main-container reto-project reto-project-new" >
+		<article class="reto-project-top">
+		</article>
+		<article class="reto-project-botton reto-scrollbar"  id="reto-x-scrollbar" >
+			<span class="reto-nor">
+            {% for set in plans_sets %}
+			<button class="btn reto-date-project reto-scrollbar" style="font-family: '微軟正黑體';font-weight: bold;font-size: 24pt;vertical-align: text-top;" type="button"><!-- data-bs-toggle="modal" data-bs-target="#exampleModal"-->
+                <p>{{ set.0 }}</p>
+                <img src="{% static "pic/rehabilitation.png" %}" width="auto" height="120" alt=""/>
+                <hr size="8px"  width="95%" align="center" class="reto-line">
+                {% for content in sets_content %}
+                    {% if set.0 == content.1 %}
+                            <!-- href aria-controls=控制對應ID -->
+                        <p data-bs-toggle="collapse" href="#aa{{ content.0 }}" role="button" aria-expanded="false" aria-controls="multiCollapseExample1">動作: {{ content.8 }}</p>
+                        <!--<button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#multiCollapseExample2" aria-expanded="false" aria-controls="multiCollapseExample2">Toggle second element</button>
+                        <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target=".multi-collapse" aria-expanded="false" aria-controls="multiCollapseExample1 multiCollapseExample2">Toggle both elements</button>-->
+                        <div class="collapse multi-collapse" id="aa{{ content.0 }}"> <!-- use id to target -->
+                            hello it's me
+                        </div>
+                        <hr size="8px"  width="95%" align="center" class="reto-line">
+                    {% endif %}
+                {% endfor %}
+			</button>
+            {% endfor %}
+			</span>
+		</article>
+
+        <article>
+
+        </article>
+	</div>
+</main>
+<!-- Modal內容 -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" style="margin-left: 500px">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">2022年10月24日</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+		<p>動作1</p>
+		<p>動作名稱:超級無敵厲害</p>
+		<p>動作次數:10次</p>
+		<p>休息時間:10秒</p>
+		<p>頂點時間:20秒</p>
+		<p>動作類型:肩關節</p>
+		<p>花費時間:30秒</p>
+		<hr size="8px"  width="95%" align="center" class="reto-line">
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn " data-bs-dismiss="modal">關閉</button>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+
+    <!-- 需引入bootstrap.js -->
+<!--<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-p34f1UUtsS3wqzfto5wAAmdvj+osOnFyQFpp4Ua3gs/ZVWx6oOypYoCJhGGScy+8" crossorigin="anonymous"></script>

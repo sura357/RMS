@@ -1,0 +1,33 @@
+{% extends 'models/base.html' %}
+{% block title %}<title>顯示所有資料</title>{% endblock %}
+
+{% block content %}
+	<h1>你好!</h1>
+	<h2>現在時間是{{now}}</h2>
+
+        <form action="/login/" method="POST" name="form1">
+		{% csrf_token %}
+            <main class="form-signin w-100 m-auto">
+		<!--<div>
+		帳號:<br>
+		密碼:<input name="cPassword" type="password" id="password" minlength="8" maxlength="30" required ><br>
+		<input type="submit"  value="Send" />
+		</div>-->
+        <h1 class="h3 mb-3 fw-normal">請輸入你的帳號密碼</h1>
+            <div class="form-floating">
+              <input name="cAccount" type="text" class="form-control" id="floatingInput" placeholder="Majjor">
+              <label for="floatingInput">帳號</label>
+            </div>
+            <div class="form-floating">
+              <input name="cPassword" type="password" class="form-control" id="floatingPassword" placeholder="12345678" minlength="5" maxlength="30" required>
+              <label for="floatingPassword">密碼</label>
+            </div>
+
+            <button class="w-100 btn btn-lg btn-primary" type="submit">登入</button>
+            <div>
+            接收到的資料:{{mess}}
+            </div>
+            </main>
+	    </form>
+
+{% endblock %}

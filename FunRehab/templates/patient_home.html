@@ -1,0 +1,204 @@
+
+{% extends template %}
+{% block content %}
+    <meta http-equiv="refresh" content="5" />
+<style type="text/css">
+*{
+    padding: 0;
+    margin: 0;
+}
+html,body{
+    height: 100%;
+    width: 100%;
+	overflow-x: hidden
+}
+.task_data {
+    background-color: #B4C7E7;
+    height: 320px;
+    width: 78%;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+    border-radius: 30px;
+    border: none;
+    margin-top: 0.5%;
+}
+.web_title  {
+    font-size: 50px;
+    font-weight: bold;
+    margin-top: 0%;
+    margin-left: 12%;
+	
+}
+.main-container{
+ position: absolute;
+
+ height: 87%;
+ width: 100%;
+ margin-left: 10%;
+ margin-top: 1%;
+}
+.lab{
+    font-family: "微軟正黑體";
+    font-size: 30px;
+    font-weight: bold;
+    word-spacing: 5px;
+    height: 95%;
+    width: 95%;
+    overflow: auto;
+    white-space: nowrap;
+    text-align: center;
+    margin-left: 2%;
+}
+.input {
+	text-align: center;
+    font-family: "微軟正黑體";
+    font-weight: bold;
+    font-size: 30px;
+	border-radius:35px;
+	border:none;
+	outline: none;
+}
+.case1 {
+    width: 300px;
+    border-radius: 35px;
+    border: none;
+    margin-top: 2%;
+    display: inline-block;
+    font-family: "微軟正黑體";
+    text-align: center;
+    margin-left: 0.5%;
+    margin-right: 0.5%;
+}
+.Information {
+    font-family: "微軟正黑體";
+    font-size: 36px;
+    font-weight: bold;
+    background-color: #B4C7E7;
+    height: 44%;
+    width: 25%;
+    margin-right: auto;
+    text-align: left;
+    border-radius: 30px;
+    text-align: center;
+    border: none;
+    margin-top: 0.5%;
+    margin-left: 12%;
+    float: left;
+}
+.Information_lab{
+    margin-left: 1.5%;
+    font-family: "微軟正黑體";
+    font-size: 20px;
+    font-weight: bold;
+    word-spacing: 5px;
+    height: 76%;
+    text-align: left;
+    overflow-y: auto;
+    line-height: 70px;
+}
+.NotificationBar {
+	font-family: "微軟正黑體";
+    font-size: 36px;
+    font-weight: bold;
+    background-color: #C0CCD3;
+    height: 44%;
+    width: 48%;
+    margin-right: auto;
+    border-radius: 30px;
+    border: none;
+    margin-top: 0.5%;
+    float: left;
+    margin-left: 2%;
+    text-align: center;
+}
+.NotificationBar_lab{
+    font-family: "微軟正黑體";
+    font-size: 32px;
+    font-weight: bold;
+    word-spacing: 5px;
+    height: 76%;
+    white-space: nowrap;
+    text-align: center;
+    margin-left: 7%;
+    overflow: auto;
+    width: 90%;
+}
+.case2{
+    background-color: #6ABDED;
+    height: 70px;
+    width: 94%;
+    margin-right: 0%;
+    text-align: left;
+    border-radius: 10px;
+    border: none;
+    margin-top: 1%;
+    float: left;
+    line-height: 65px;
+  
+}
+	
+	/*捲軸底色*/
+.style-scrollbar::-webkit-scrollbar-track {
+	background-color: #F2F2F2;
+	border-radius: 15px;
+	
+}
+
+/*捲軸寬度*/
+.style-scrollbar::-webkit-scrollbar {
+	width: 20px;
+	background-color: black;
+	background-color: rgba(0,0,0,0.00);
+}
+
+/*捲軸本體顏色*/
+.style-scrollbar::-webkit-scrollbar-thumb {
+	background-color: #ADB9CA;
+	border-radius: 15px;
+}
+
+</style>
+
+<main>
+<div class="main-container">
+		<article class="web_title">復健任務欄</article>
+		<article class="task_data">
+			<div class="lab style-scrollbar">
+                {% for motion in motionList %}
+                    <div class="case1" style="background: #E85B5E;">
+                        {{motion.0}}
+                        <br>
+                        {{motion.1}}
+                        <br>
+                        <a href="RehabilitationMotion://55688" id="{{motion.1}}" name="{{motion.1}}" >
+                            <img src="../static/pic/rehabilitation.png" width="auto" height="120" alt=""/>
+                        </a>
+                    </div>
+                {% endfor %}
+			</div>
+		</article>
+
+		<article class="Information">
+            <span style="font-size: 32px">復健相關資訊</span><br>
+			<div class="Information_lab style-scrollbar">
+                {% for rehub in rehuburlList %}
+                    <a href="{{rehub.2}}">{{rehub.1}}</a><br>
+                {% endfor %}
+			</div>
+		</article>
+	
+		<article class="NotificationBar">
+			通知欄<br>
+			<div class="NotificationBar_lab style-scrollbar">
+				{% for contact in contactrecordList %}
+                    <div class="case2">{{ contact.0 }}</div>
+                {% endfor %}
+			</div>
+
+		</article>
+	</div>
+</main>
+
+{% endblock %}
+

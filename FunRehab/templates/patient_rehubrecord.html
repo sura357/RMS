@@ -1,0 +1,45 @@
+{% extends template %}
+{% block content %}
+<main class="in-main">
+<br>	
+<h1><b>　看診紀錄</b></h1>
+<br>
+
+
+<div class="in-main-caption-bar">
+<table style="width: 100%;">
+	<tr>
+		<td style="width: 20%;">
+		　　日期
+		</td>
+		<td style="width: 15%;">
+		病名
+		</td>
+		<td  style="width: 20%;">
+		動作
+		</td>
+	</tr>	
+</table>	
+</div>
+<br>
+    {% for rehubrecord in rehubrecordList %}
+        <div class="in-main-content-bar">
+	<table style="width: 100%;">
+	<tr>
+		<td style="width: 20% ;text-indent: 40px;">
+		{{ rehubrecord.0 }}
+		</td>
+		<td style="width: 15%;">
+		{{ rehubrecord.1 }}
+		</td>
+		<td  style="width: 20%;">
+		{{ rehubrecord.2 }}
+		</td>
+
+	</tr>
+</table>
+</div>
+        <br>
+    {% endfor %}
+
+{% endblock %}

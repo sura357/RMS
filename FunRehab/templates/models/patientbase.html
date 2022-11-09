@@ -1,0 +1,45 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>去復健</title>
+<link rel="icon" href="../../static/pic/rehabilitation.ico"/>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-wEmeIV1mKuiNpC+IOBjI7aAzPcEZeedi5yW5f2yOq55WWLwNGmvvx4Um1vskeMj0" crossorigin="anonymous">
+<!--宣告 CSS-->
+<link rel="stylesheet" href="../../static/include/projectDesign.css">
+<link rel="stylesheet" href="../../static/include/MoreDesign.css">
+<link rel="stylesheet" href="../../static/include/design.css">
+<script src="../../static/include/monthlyTable.js"></script><!-- 月曆 -->
+<script src="../../static/include/projectDiv.js"></script><!-- 計畫 -->
+<script src="../../static/include/navbar.html"></script>
+
+
+</head>
+
+<body>
+<header>
+	<!-- 導航列 -->
+	<script>
+
+		var nav = 
+			  {
+				  Name: ["你好 {{name}}", "登出", "基本資料", "看診紀錄", "復健紀錄"],  // 導航內容字串(array)
+				  Href: ["", "../patient_Logout", "../patient_Information",  "../patient_medicalrecord", "../patient_rehubrecord"],  // 導航連結(array)
+				  red: -1,       // 導航陣列位置 為紅字(int)
+				  rabl: false,  // 是否復健師(bl)
+			  };
+		nav_print(nav.Name, nav.Href, nav.red, nav.rabl);  // 打印nav html
+
+
+	</script>
+</header>
+<main>
+        {% csrf_token %}
+		{% block content %}
+        {% endblock  %}
+
+</main>
+	
+<footer> </footer>
+</body>
+</html>

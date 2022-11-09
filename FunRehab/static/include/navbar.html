@@ -1,0 +1,114 @@
+// JavaScript Document
+
+// 組合輸出 導航列nav  // 導航內容字串(array), 導航連結(array), 導航第幾位置 為紅字(int), 是否復健師(bl)
+function nav_print(navArray, hrefArray, red, rabl)
+{
+
+	if (navArray.length <= red)
+	{
+		console.log("紅色超出陣列", navArray.length, red);
+		return;
+	}
+
+	if (navArray.length != hrefArray.length)
+	{
+		console.log("導航列字串 與 導航列連結 數量不對等");
+		return;
+	}
+
+	var navStart = "<nav class='navbar fixed-top navbar-collapse show collapsing' id='collapseExample'>";
+	var navEnd = "</nav>";
+	var ulStart = "<ul class='navbar-nav' >";
+	var ulEnd = "</ul>";
+	var navTopStart = "<div class='nav-top'>";
+	var navTopEnd = "</div>";
+	var navbarBrand = "<li class='navbar-brand'><a class='nav-link' href='../patient_home'>去復健<img src='../../static/pic/rehabilitation.png' alt=''/></a></li>";
+	var navRehabilitation = "<li class='nav-item nav-rehabilitation'><a class='nav-link' href='#'>復健師版</a></li>";
+	var navInformation = "<li class='nav-item nav-information'>\
+							<div class='nav-solid'></div>\
+							<div>\
+								<div> ©2022 去復健.org </div>\
+								<div> <a href='#'>服務條款</a> <a href='#'>隱私權政策</a> </div>\
+							</div>\
+						</li>";
+	var liStart = "<li class='nav-item'>";
+	var liEnd = "</li>";
+	var aStart = "<a class='nav-link";
+	var aRed = " nav-choose-word'";
+	var aYesRedHref = " href='";
+	var aHref = "' href='";
+	var aLast = "'>";
+	var aEnd = "</a>";
+
+	var temp = "";
+	var navHtml = "";
+
+	navHtml += navStart;
+	navHtml += ulStart;
+	navHtml += navTopStart;
+	navHtml += navbarBrand;
+
+	if (rabl)
+		navHtml += navRehabilitation;
+
+	for(var i=0;i<navArray.length;i++)
+	{
+		temp = "";
+		temp += liStart;
+		temp += aStart;
+
+		if (i == red)
+		{
+			temp += aRed;
+			temp += aYesRedHref;
+		}
+		else
+		{
+			temp += aHref;
+		}
+
+		temp += hrefArray[i];
+		temp += aLast;
+
+		temp += navArray[i];
+
+		temp += aEnd;
+		temp += liEnd;
+		navHtml += temp;
+	}
+
+	navHtml += navTopEnd;
+	navHtml += navInformation;
+	navHtml += ulEnd;
+	navHtml += navEnd;
+
+	if (navHtml != "")
+		document.write(navHtml);
+	return;
+}
+
+/*
+document.write("\
+<nav class='navbar fixed-top navbar-collapse show collapsing' id='collapseExample'>\
+	<ul class='navbar-nav' >\
+		<div class='nav-top'>\
+			<li class='navbar-brand'><a class='nav-link' href='#'>去復健<img src='pic/rehabilitation.png' alt=''/></a></li>\
+			<li class='nav-item nav-rehabilitation'><a class='nav-link' href='#'>復健師版</a></li>\
+			<li class='nav-item'><a class='nav-link' href='#'>{使用者姓名}</a></li>\
+			<li class='nav-item'><a class='nav-link nav-choose-word' href='#'>測試測試</a></li>\
+			<li class='nav-item'><a class='nav-link' href='#'>測試測試</a></li>\
+			<li class='nav-item'><a class='nav-link' href='#'>測試測試</a></li>\
+			<li class='nav-item'><a class='nav-link' href='#'>測試測試</a></li>\
+			<li class='nav-item'><a class='nav-link' href='#'>測試測試</a></li>\
+			<li class='nav-item'><a class='nav-link' href='#'>測試測試</a></li>\
+		</div>\
+		<li class='nav-item nav-information'>\
+			<div class='nav-solid'></div>\
+			<div>\
+				<div> ©2022 去復健.org </div>\
+				<div> <a href='#'>服務條款</a> <a href='#'>隱私權政策</a> </div>\
+			</div>\
+		</li>\
+	</ul>\
+</nav>");
+*/

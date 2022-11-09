@@ -1,0 +1,189 @@
+{% extends template %}
+{% block content %}
+<style type="text/css">
+* {
+    padding: 0;
+    margin: 0;
+}
+html, body {
+    height: 100%;
+    width: 100%;
+	overflow: hidden;
+}
+.rent_data {
+    background-color: #B4C7E7;
+    height: 48%;
+    width: 70%;
+    margin-left: 12%;
+    margin-right: 8%;
+    text-align: left;
+    border-radius: 30px;
+    border: none;
+    margin-top: 0.5%;
+}
+.user_data {
+    background-color: #B4C7E7;
+    height: 45%;
+    width: 70%;
+    margin-left: 12%;
+    margin-right: 8%;
+    text-align: left;
+    border-radius: 30px;
+    border: none;
+    margin-top: 1%;
+	padding: 20px;
+}
+.user_data_button {
+	width: 20%;
+	height: 100%;
+    text-align: right;
+    border-radius: 30px;
+    border: none;
+    display: inline-block;
+	margin-right: 0px;
+	margin-left: 35%;
+}
+.Button {
+    text-align: center;
+    font-family: "微軟正黑體";
+    font-weight: bold;
+    font-size: 30px;
+    border-radius: 20px;
+    border: none;
+    outline: none;
+    width: 100px;
+    height: 60px;
+    background-color: #7882EF;
+    transition: all .3s linear;
+    height: auto;
+	margin-right: 0px;
+	margin-top: 90%;
+
+}
+.Button:hover {
+    background-color: #0858D4;
+}
+.Button:active {
+    background-color: #67C8FF;
+}
+.web_title {
+    font-size: 50px;
+    font-weight: bold;
+    margin-top: 0.5%;
+    margin-left: 12%;
+}
+.main-container {
+    position: absolute;
+    height: 87%;
+    width: 100%;
+    margin-left: 10%;
+    margin-top: 1%;
+}
+.lab {
+	padding-top: 10px;
+    margin-left: 1.5%;
+    font-family: "微軟正黑體";
+    font-size: 30px;
+    font-weight: bold;
+    word-spacing: 5px;
+    line-height: 10%;
+    line-height: 140%;
+
+    display: inline-block;
+    float: left;
+    display: inline-block;
+}
+.input {
+    text-align: left;
+    font-family: "微軟正黑體";
+    font-weight: bold;
+    font-size: 30px;
+    border-radius: 35px;
+    border: none;
+    outline: none;
+    padding-left: 10px;
+}
+.input_background {
+    border-radius: 35px;
+    background: #FFFFFF;
+    width: 105%;
+    display: inline-block;
+
+}
+.lab1 {
+
+    margin-left: 1.5%;
+    font-family: "微軟正黑體";
+    font-size: 30px;
+    font-weight: bold;
+    word-spacing: 5px;
+    display: inline-block;
+    float: left;
+    display: inline-block;
+}
+</style>
+<main>
+  <div class="main-container">
+    <article class="web_title">基本資料</article>
+    <article class="rent_data">
+      <div class="lab"> 姓名：{{ rid.name }}<br>
+        Email：{{ rid.email }} </div>
+    </article>
+    <article class="user_data">
+      <div class="lab1">密碼<br>
+        <br>
+        確認密碼<br>
+        <br>
+        電話 </div>
+      <div class="lab">
+        <div class="input_background">
+          <input type="password" class="input" id="floatingPassword2" size="14" maxlength="10" placeholder="Password">
+          <i id="checkEye2" class="fas fa-eye"></i></div>
+        <br>
+        <br>
+        <div class="input_background">
+          <input type="password" id="floatingPassword" class="input" size="14" maxlength="10"  placeholder="Password">
+          <i id="checkEye" class="fas fa-eye"></i> </div>
+        <br>
+        <br><div class="input_background">
+        <input type="text" class="input" size="14" maxlength="10">
+		  </div>	
+      </div>
+      <div class="user_data_button">
+        <input type="button" value="儲存" class="Button">
+      </div>
+    </article>
+  </div>
+</main>
+<script>
+		var checkEye2 = document.getElementById("checkEye2");
+      var floatingPassword2 =  document.getElementById("floatingPassword2");
+      checkEye2.addEventListener("click", function(e){
+        if(e.target.classList.contains('fa-eye')){
+        //換class 病患 type
+          e.target.classList.remove('fa-eye');
+          e.target.classList.add('fa-eye-slash');
+          floatingPassword2.setAttribute('type','text')
+        }else{
+          floatingPassword2.setAttribute('type','password');
+          e.target.classList.remove('fa-eye-slash');
+          e.target.classList.add('fa-eye')
+        }
+      });
+	
+		var checkEye = document.getElementById("checkEye");
+      var floatingPassword =  document.getElementById("floatingPassword");
+      checkEye.addEventListener("click", function(e){
+        if(e.target.classList.contains('fa-eye')){
+        //換class 病患 type
+          e.target.classList.remove('fa-eye');
+          e.target.classList.add('fa-eye-slash');
+          floatingPassword.setAttribute('type','text')
+        }else{
+          floatingPassword.setAttribute('type','password');
+          e.target.classList.remove('fa-eye-slash');
+          e.target.classList.add('fa-eye')
+        }
+      });
+</script>
+{% endblock %}

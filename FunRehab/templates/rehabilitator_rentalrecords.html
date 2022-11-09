@@ -1,0 +1,122 @@
+{% extends template %}
+{% block content %}
+<main class="in-main">
+<br>
+<h1><b>　設備租借</b></h1>
+<br>
+
+<!-- 身分證圓格子 -->
+<div class="in-main-explain"  >
+  <p>機器目前共有{{ kinect_amount }}台可供使用，租金為$NT800/月，使用須遵守以下規範
+   <p> 1.使用時請勿重摔等損害機器之行為，如損壞需按照院內規定進行賠償
+   <p>  2.使用完畢後，請整理好線材妥善保存
+   <p>  3.請於租借期限內歸還，有借有還，再借不難
+</div>
+<br><br><br><br><br>
+<div class="in-main-explain-lease" style="background: #DAE3F3">
+<br>
+<div class="in-main-explain-lease-content">
+	<p></p><p></p>
+
+	<div><a style="font-size: 40px"><b>機器</b></a></div>
+	<div style="height: 210px;  overflow-y:scroll;" class="scrollbar-style">
+        {% for kinect in kinects %}
+            <input type='button' class="in-main-explain-lease-content-bar" id="kinect" value="{{ kinect.id }}" onClick='kinectbtn(this.value)' >
+        {% endfor %}
+	</div>
+</div>
+<div class="in-main-explain-lease-content">
+	<p></p><p></p>
+	<!--<form method="post"> -->
+	<div>
+		<div style="display:inline"><a style="font-size: 40px;display:inline"><b>病患</b></a>
+			<form method="post" style="display:inline">
+				<input type="text" required style="height:20%; width:200px; line-height:50px; border:none; display:inline; background-color: #FFFFFF" />
+				<input type="submit" required  style="height: 45px; line-height:40px;text-align: center;" value="🔎" />
+			</form></div>
+		<div style="height: 210px; overflow-y:scroll; " class="scrollbar-style">
+            {% for patient in patients %}
+                <input type='button' class="in-main-explain-lease-content-bar-patient" id="patient" value="{{ patient.1 }}" onClick='patientbtn(this.value)' >
+            {% endfor %}
+	    </div>
+		<!--<input type="submit" style="height: 50px;line-height: 50px" />	-->
+	</div>
+	<!--</form>-->
+</div>
+<br><br><br><br><br>
+<form method="post" style="height: 60%;width: 100%" >
+    {% csrf_token %}
+	<div style="float: left; width: 40%;margin-left: 20px">
+		起租日 <input type="date" required style="height: 15%;border: none" id="sel_date" />
+	</div>
+	<div style="float: left; width: 40%;margin-left: 50px">
+		時間(月) <input type="text" border="0" required style="height: 15%;border: none" pattern="^[0-9]" id="period" />
+	</div>
+	<div style="float: left; width: 10%; margin-left: 35px">
+		<input type="submit" style="" class="in-main-notice-button" value="租借" id="lendBtn" />
+	</div>
+</form>
+</div>
+<br>
+</main>
+    <script>
+        var kinectid=0;
+        var patientid='';
+        var notsel = document.getElementsByClassName("in-main-explain-lease-content-bar");
+        var notsel_p = document.getElementsByClassName("in-main-explain-lease-content-bar-patient");
+
+        function kinectbtn(kinect_id) // 選擇機器
+        {
+            kinectid = kinect_id;
+            console.log(kinectid);  // 1
+
+            /*for(var i=0;i<notsel.length;i++){
+                notsel[i].className = "in-main-explain-lease-content-bar";
+
+                if(notsel[i]==kinect_id)
+                    notsel[i].className +=" in-main-explain-lease-content-bar-selected";
+                console.log(notsel[i]+notsel[i].className)
+            };*/
+            for (var [key] of Object.entries(notsel)) {
+                notsel[key].className = "in-main-explain-lease-content-bar";
+                //console.log(key+kinect_id);
+                if(notsel[key].value==kinect_id)
+                    notsel[key].className +=" in-main-explain-lease-content-bar-selected";
+                //console.log(key+value)
+            }
+
+
+        }
+
+        function patientbtn(id) // 選擇機器
+        {
+            patientid = id;
+            console.log(patientid);  // 1
+
+            for (var [key] of Object.entries(notsel_p)) {
+                notsel_p[key].className = "in-main-explain-lease-content-bar-patient";
+                //console.log(key+kinect_id);
+                if(notsel_p[key].value==patientid)
+                    notsel_p[key].className +=" in-main-explain-lease-content-bar-patient-selected";
+                //console.log(key+value)
+            }
+        }
+
+        $('#lendBtn').click(function () {
+            var sel_date = document.getElementById("sel_date").value;
+            var period = document.getElementById("period").value;
+            //var sel_date = temp[0]+temp[1]+temp[2];
+            console.log("借出去了");
+            console.log(sel_date)
+            console.log(period)
+            if(kinectid==null || patientid==null ||sel_date==null||period==null)
+                return;
+
+            $.ajax({
+                type: 'GET',
+                url: '/rehabilitator_rentalrecords',
+                data: {'sel_kinect':kinectid,'sel_patient':patientid ,'sel_date':sel_date,'period':period}
+            });
+        });
+    </script>
+{% endblock %}

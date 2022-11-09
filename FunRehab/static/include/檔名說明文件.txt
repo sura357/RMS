@@ -1,0 +1,87 @@
+navbar.js  // 內有函式  
+{
+// nav_print(navArray, hrefArray, red, rabl)  // 打印nav html
+// 導航內容(array), 導航連結(array), 導航位置 為紅字(int), 是否復健師(bl)
+}
+
+upMonthlyData.js  // 內有函式
+{
+//upMonthlyData(preset, selecting, selected, model)  // 更新月曆  
+// 本月, 選取中, 有資料, 模式 (true->一般使用者, false->復健師)
+//zeroToStr(num)  // 補0
+//getMonthName(month)  // 取 英文簡寫月份
+}
+
+monthlyTable.js  // 內有函式
+{
+//monthly_print(model)  // 打印 月曆  
+// 模式 (true->一般使用者, false->復健師)
+}
+
+projectDiv.js  // 內有函式
+{
+project_print(name, action, time, exact, great)  // 打印 復健計畫div
+// 復健計畫名稱, 動作名稱, 時間, 準確率, 好棒
+}
+
+monthlyEvent.js  // 內有宣告變數  // 內有函式  // 內有事件
+{
+//變數
+var yearLeftBtn = document.getElementById("yearLeftBtn");
+var yearRightBtn = document.getElementById("yearRightBtn");
+var monLeftBtn = document.getElementById("monLeftBtn");
+var monRightBtn = document.getElementById("monRightBtn");
+var yearDiv = document.getElementById("yearDiv");
+var monthDiv = document.getElementById("monthDiv");
+
+//函式
+monthlyBtn(event) // 選擇日期  // event->yyyy-mm-dd
+setYear(difference)  // 調整年分  // difference->加減變數 -> 1 or -1
+setMonth(difference)  // 調整月分 // difference->加減變數 -> 1 or -1
+
+//事件
+yearLeftBtn.addEventListener('click',function(event){},false);
+yearRightBtn.addEventListener('click',function(event){},false);
+monLeftBtn.addEventListener('click',function(event){},false);
+monRightBtn.addEventListener('click',function(event){},false);
+}
+
+newAction.js  // 內有宣告變數  // 內有函式  // 內有事件
+{
+var patientID = "";  // 選擇病患
+	
+var action = 
+	{
+		name: "",     // 動作名稱
+		duration: 0,  // 次數
+		bread: 0,     // 休息時間
+		ontop: 0,     // 頂點維持時間
+		type: 0,      // 動作類型
+		motion: 0,    // 動作花費時間
+	};
+var saveAction = [];  // 存檔action(array)  // 放置 action
+var presetAction = ["動作1", "動作2", "動作3"];  // 動作有哪些
+
+var planName = document.getElementById("planName");  // 計畫名稱
+var patient = document.getElementById("patient");  // 病患
+var actionGather = document.getElementById("actionGather");  // 動作集合
+var addBtn = document.getElementById("addBtn");  // 新增按鈕
+var saveBtn = document.getElementById("saveBtn");  // 存檔按鈕
+var patientBtn = document.getElementById("patientBtn");  // 選擇病患按鈕
+
+// 函式---
+//clear_action()  // 清空動作
+//stringToHTML(str)  // 字串轉html
+//add_action(html)  // 加入動作html
+//return_action(selectName)  // 回傳動作字串 // 動作名稱(array)
+
+// 事件---
+//patientBtn.addEventListener('click',function(event){  },false);// 選擇病患
+//addBtn.addEventListener('click',function(event){ },false);// 新增
+//saveBtn.addEventListener('click',function(event){  },false);// 存檔
+}
+
+
+
+
+

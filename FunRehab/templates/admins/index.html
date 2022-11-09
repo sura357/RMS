@@ -1,0 +1,22 @@
+{% extends template %}
+{% block title %}<title>功能頁</title>{% endblock %}
+{% load static %}
+{% block content %}
+	<h1>你好!{{myuser}}</h1>
+	<h2>現在時間是{{now}}</h2>
+	<h2>顯示所有商品</h2>
+	
+	<div class="row row-cols-1 row-cols-sm-2 row-cols-md-1 g-3" align="center">
+		<div class="col">
+			<div class="card" style="width: 18rem;">
+				<img src="{% static "pics/setting.png" %}" class="card-img-top" alt="...">
+				<div class="card-body">
+					<h5 class="card-title">選擇負責患者</h5>
+					<p class="card-text">可進行以下動作..<br>查看患者資訊、編輯復健計畫、幫助患者註冊帳號</p>
+					
+					<a href="/patients/" class="btn btn-primary">進行選擇</a>
+				</div>
+			</div>
+		</div>
+	</div>
+{% endblock %}

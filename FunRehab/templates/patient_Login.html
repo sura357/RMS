@@ -1,0 +1,101 @@
+
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>去復健</title>
+<style type="text/css">
+*{
+    padding: 0;
+    margin: 0;
+}
+html,body{
+    height: 100%;
+    width: 100%;
+}
+.BackGround {
+	 position: relative;       
+    width: 70%;
+    height: 100%;
+    background-color: #D6DCE5;
+    min-height: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+    font-family: "微軟正黑體";
+    font-weight: bold;
+    font-size: 50px;
+}
+
+.LOGO {
+    margin-top: 8%;
+}
+.input {
+	text-align: center;
+    font-family: "微軟正黑體";
+    font-weight: bold;
+    font-size: 45px;
+	border-radius:35px;
+	border:none;
+	outline: none;
+}
+.Button {
+    text-align: center;
+    font-family: "微軟正黑體";
+    font-weight: bold;
+    font-size: 45px;
+    border-radius: 5px;
+    border: none;
+    outline: none;
+    width: 12%;
+    margin-top: 8%;
+    background-color: #7882EF;
+	transition: all .3s linear;
+}
+.Button:hover{
+    background-color: #0858D4;
+}
+
+.Login {
+    margin-top: 8%;
+}
+.Line{
+	margin-top: 9%;
+	margin-left: auto;
+	margin-right: auto;
+    border-radius: 20px;    
+}
+.last{
+    text-align: right;
+    font-size: 30px;
+}
+	
+.botton{
+	width: 100%;
+	position:absolute;
+	bottom: 0px;             
+}
+</style>
+</head>
+<body>
+	<div class="BackGround">
+	  <img class="LOGO" src="../static/pic/home_Logo.png" width="30%" height="auto" alt=""/><br>
+        <form method="post" action="../patient_Login/" >
+            {% csrf_token %}
+          <div class="Login">
+                身分證字號:
+                <input type="text" class="input" size="12" maxlength="10" name="Account">
+            </div>
+            <input type="submit" value="登入" class="Button">
+        </form>
+		<div class="botton">
+		<hr size="8px"  width="95%" color="#3040ED" align="right" class="Line">
+	  <div class="last">
+			©2022 去復健.org<br>
+		  <a href="www.youtube.com">服務條款</a>
+		  <a href="www.youtube.com">隱私權政策</a>
+		</div>
+			</div>
+	</div>
+</body>
+</html>

@@ -1,0 +1,88 @@
+{% extends template %}
+{% block content %}
+<main class="in-main">
+<br>	
+<h1><b>　復健紀錄</b></h1>
+<br>
+	<!-- 搜尋表單 -->
+<form method="post" action="../rehabilitator_rehubrecord/" >
+    <div style="font-size: 18pt;font-weight: bold;width: 95%;height: 5%;margin-left: 2%;">
+        {% if sel_patient != null %}
+            目前正在檢視 {{ sel_patient_name.0.2 }} 的復健紀錄
+        {% endif %}
+    </div>
+	<!-- 並排 -->
+	<div style="float:left;"> 
+		<!-- 身分證圓格子 -->
+		<div class="in-main-search" >
+            病患身分證：
+            <select name="sel_patient" style="width:200px;height:40px;border: none; color:black;" onChange="this.form.submit();">
+                <option value=""> 選擇病患</option>
+                {% for patient in patients %}
+                    {% if sel_patient == patient.1 %}
+                        <option value="{{ patient.1 }}" selected="selected"> {{ patient.1 }}</option>
+                    {% else %}
+                        <option value="{{ patient.1 }}"> {{ patient.1 }}</option>
+                    {% endif %}
+                {% endfor %}
+            </select>　　
+            <!--<input type="text" style="width:200px;height:40px;border: none;" required pattern="^[A-Z]+[0-9]{9}$">-->
+		</div>
+	</div>
+	<!-- 分隔div -->
+	<div style="float:left; color: transparent">　　　　</div>
+	<!-- 按鈕div -->
+	<div style="float:left;">
+        {% csrf_token %}
+	　	<input type="submit" class="in-main-search-button" value="搜尋" />
+	</div>
+</form>
+<br><br><br><br>
+<div class="in-main-caption-bar">
+<table style="width: 100%;font-size: 18pt;font-weight: bold;text-align: center;">
+	<tr>
+        <td  style="width: 20%;">
+            復健計畫名稱
+		</td>
+		<td style="width: 20%;">
+            復健日期
+		</td>
+		<td style="width: 15%;">
+		    次數
+		</td>
+		<td  style="width: 20%;">
+		    動作標準度
+		</td>
+		<td  style="width: 15%;">
+		    完成度
+		</td>
+	</tr>	
+</table>	
+</div>
+{% for record in records %}
+<div class="in-main-content-bar">
+	<table style="width: 100%;font-size: 18pt;font-weight: bold;text-align: center;">
+	<tr>
+        <td  style="width: 20%;">
+		    {{ record.0 }}
+		</td>
+		<td style="width: 20% ;text-indent: 40px;">
+            {{ record.0 }}
+		</td>
+		<td style="width: 15%;">
+		    {{ record.1 }}次
+		</td>
+		<td  style="width: 20%;">
+		    {{ record.3 }}%
+		</td>
+		<td  style="width: 15%;">
+		    {{ record.4 }}%
+		</td>
+	</tr>	
+</table>
+</div>
+{% endfor %}
+<br>
+</main>
+
+{% endblock %}

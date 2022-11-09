@@ -1,0 +1,177 @@
+{% extends template %}
+{% block content %}
+
+<main class="in-main">
+	<div class="title">
+		復健紀錄
+	</div>
+	<div class="verticalCenter">
+		<input id="patient" class="reto-input-patient " type="text" />
+		<input id="patientBtn" class="btn reto-btn-patient" type="submit" value="選擇病患"/>
+	</div>
+	<div class="main-container reto-project">
+		<article class="monthly-left reto-left"  id="div1">
+			<div class="reto-p">
+				<p class="reto-block">計畫名稱</p>
+				<input id="planName" class="reto-input-patient reto-block reto-input-project" type="text" />
+			</div>
+			<div class="reto-p">
+				<p>復健時間</p>
+			</div>
+			<div class="reto-monthly">
+			<!-- 月曆 -->
+			<script>
+				var today = new Date();
+				var presetDate = 
+								{
+									year: today.getFullYear(),
+									month: today.getMonth()+1,  // 取出為上一個月 所以+1
+								};
+				var selectingDate = 
+								{
+									year: today.getFullYear(),
+									month: today.getMonth()+1,  // 取出為上一個月 所以+1
+									day: today.getDate(),
+								};
+				var selectedDate = ["20220910", "20220917", "20220924", "20220913", "20220920", "20220927",	"20221002", "20220929"];
+				var model = false;  // 模式 (true->一般使用者, false->復健師)
+				monthly_print(false);  // 打印 月曆 html  // (true->使用者, false->復健師)
+			</script>
+			</div>
+		</article>
+			<div  class="reto-solid reto-block">
+			</div>
+			<article  class="monthly-right reto-right " id="style-scrollbar">
+				<ul id="actionGather">
+				<!-- 在最後呼叫新增動作事件 -->	
+				</ul>
+				<button id="addBtn" class="btn reto-add "><p class="horizaCenter">+</p></button>
+				<input id="saveBtn" class="btn reto-save" type="submit" value="存檔"/>
+			</article>
+		</div>
+</main>
+	
+<footer> </footer>
+	
+</body>
+</html>
+
+<!-- 月曆事件 -->
+<script src="include/monthlyEvent.js"></script>
+<!-- 新增動作事件 -->
+<script src="include/newAction.js"></script>
+
+<script>
+function upMonthlyData(preset, selecting, selected, model)  // 更新月曆  // 本月, 選取中, 有資料, 模式 (true->一般使用者, false->復健師)
+{
+	var monthDays = [31, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31, 31];  // 12 <- 1~12 -> 1  共 14個
+	var mon = [12, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 1];
+	
+	if ( ((preset.year % 4 == 0) && (preset.year % 100 != 0)) || (preset.year % 400 == 0) )  // 閏年
+		monthDays[2] = 29;
+	
+	var monInWeek = new Date(preset.year, mon[preset.month-1], 1);
+	var weekDay = monInWeek.getDay();  // 取今年今月1日星期
+	var days = document.getElementsByClassName("monthly-btn");
+	var time = "";
+	var timdID = "";
+	
+	//中間段，當月
+	for (var i = 0; i < monthDays[preset.month]; i++)
+	{
+		days[weekDay + i].value = (i+1);
+		days[weekDay + i].className = "monthly-btn" + ((model == false) ? (" reto-monthly-btn") : (""));
+		
+		time = zeroToStr(preset.year) + zeroToStr(mon[preset.month]) + zeroToStr(i+1);
+		timdID = zeroToStr(preset.year) + "-" + zeroToStr(mon[preset.month]) + "-" + zeroToStr(i+1);
+		days[weekDay + i].id= timdID;
+		
+		for (var j = 0; j < selected.length;j++)
+		{
+			if (time == selected[j])
+			{
+				days[weekDay + i].className = days[weekDay + i].className + " monthly-btn-selected";	
+				break;
+			}
+		}
+
+		if (selecting.year == preset.year && selecting.month == mon[preset.month] && selecting.day == i+1)
+				days[weekDay + i].className = days[weekDay + i].className + ((model == false) ? (" reto-btn-selecting") : (" monthly-btn-selecting"));
+		
+		
+	}
+	
+	//上個月
+	for (var i = (weekDay-1), day = monthDays[preset.month-1]; i >=0; i--, day--)
+	{
+		days[i].value = day;
+		days[i].className = "monthly-btn" + ((model == false) ? (" reto-btn-not") : (" monthly-btn-not")) + ((model == false) ? (" reto-monthly-btn") : (""));
+		
+		time = zeroToStr(preset.year) + zeroToStr(mon[preset.month-1]) + zeroToStr(day);
+		timdID = zeroToStr(preset.year) + "-" + zeroToStr(mon[preset.month-1]) + "-" + zeroToStr(day);
+		days[i].id= timdID;
+		
+		for (var j = 0; j < selected.length;j++)
+		{
+			if (time == selected[j])
+			{
+				days[i].className = days[i].className + " monthly-btn-selected";	
+				break;
+			}
+		}
+		
+		if (selecting.year == preset.year && selecting.month == mon[preset.month-1] && selecting.day == day)
+			days[i].className = days[i].className + ((model == false) ? (" reto-btn-selecting") : (" monthly-btn-selecting"));
+	}
+	
+	
+	
+	//下個月
+	for (var i = monthDays[preset.month] + weekDay, day = 1; i < days.length; i++, day++)
+	{
+		days[i].value = day;
+		days[i].className = "monthly-btn" + ((model == false) ? (" reto-btn-not") : (" monthly-btn-not")) + ((model == false) ? (" reto-monthly-btn") : (""));
+		
+		time = zeroToStr(preset.year) + zeroToStr(mon[preset.month+1]) + zeroToStr(day);
+		timdID = zeroToStr(preset.year) + "-" + zeroToStr(mon[preset.month+1]) + "-" + zeroToStr(day);
+		days[i].id= timdID;
+		
+		for (var j = 0; j < selected.length;j++)
+		{
+			if (time == selected[j])
+			{
+				days[i].className = days[i].className + " monthly-btn-selected";	
+				break;
+			}
+		}
+		
+		if (selecting.year == preset.year && selecting.month == mon[preset.month+1] && selecting.day == day)
+			days[i].className = days[i].className + ((model == false) ? (" reto-btn-selecting") : (" monthly-btn-selecting"));
+	}
+}
+
+function zeroToStr(num)  // 補0
+{
+	return (num < 10) ? ("0" + num.toString()):(num.toString());
+}
+
+function getMonthName(month)  // 取 英文簡寫月份
+{
+  if (month == 1) return "Jan";
+  if (month == 2) return "Feb";
+  if (month == 3) return "Mar";
+  if (month == 4) return "Apr";
+  if (month == 5) return "May";
+  if (month == 6) return "June";
+  if (month == 7) return "July";
+  if (month == 8) return "Aug";
+  if (month == 9) return "Sept";
+  if (month == 10) return "Oct";
+  if (month == 11) return "Novr";
+  if (month == 12) return "Dec";
+}
+</script>
+<script>
+	upMonthlyData(presetDate, selectingDate, selectedDate, model);  // 更新月曆  // 本年本月(object), 選取中(object), 有資料(array), 模式(bool)</script>
+
+{% endblock %}
