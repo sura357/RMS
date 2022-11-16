@@ -1,4 +1,4 @@
-from pySQL import SQLiteDatabase
+from CI.pySQL import SQLiteDatabase
 from pathlib import Path
 import threading
 import json

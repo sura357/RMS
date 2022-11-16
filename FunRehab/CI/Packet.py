@@ -27,9 +27,7 @@ class PACKET():
         self.ID = self.ALLpackets[self.dotSpot[0]+1:self.dotSpot[0]+2]
         self.CMD = self.ALLpackets[self.dotSpot[0]+2:self.dotSpot[0]+3]
         self.SCMD = self.ALLpackets[self.dotSpot[0]+3:self.dotSpot[0]+4]
-        print("-------------------")
-
-        print(self.ALLpackets)
+        print("解完封包後-------------------")
 
         try:
             if int(self.CMD) > 0:

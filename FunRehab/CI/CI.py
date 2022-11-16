@@ -1,8 +1,9 @@
 import socket
 import os
+import time
 import threading
-from Packet import PACKET
-from Func import FUNC
+from CI.Packet import PACKET
+from CI.Func import FUNC
 
 
 
@@ -19,22 +20,22 @@ class SOCKET():
         self.func = FUNC()
 
     def startAccept(self):
-        print("開始監聽")
-        
         self.threadAccept.start()
 
     def serverAccept(self):
+        #while True:
         try:
             self.server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)  # 要選擇通訊模式
             self.ip = socket.gethostbyname(socket.gethostname())  # 找 IP
             self.server.bind((self.ip, self.port))  # 正式建立連線
-
+            print("開始監聽")
             self.server.listen(self.connLimit)  # 監聽幾個人
             print('建置完成,IP 是' + self.ip)
         except Exception as e:
             print("Error:" + str(e))
-            return
-        
+            #time.sleep(3)
+            #continue
+
         while self.connNum <= self.connLimit:
             conn, address = self.server.accept()
             threadRead = threading.Thread(target=self.socketRead, args=(self, conn))
@@ -57,10 +58,10 @@ class SOCKET():
             print("Get:"+res.decode('utf-8'))
             readPack.Disassemble()
 
-            print(readPack.ID," ", readPack.CMD," ",readPack.SCMD)
+            print("目前封包指令："+readPack.ID," ", readPack.CMD," ",readPack.SCMD)
 
             # Parse
-            reJason = self.func.Switch[int(readPack.ID)][int(readPack.CMD)][int(readPack.SCMD)]([conn,readPack])
+            self.func.Switch[int(readPack.ID)][int(readPack.CMD)][int(readPack.SCMD)]([conn,readPack])
                 
             # except Exception as e:
             #     print("Error:" + str(e))

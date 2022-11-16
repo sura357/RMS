@@ -96,7 +96,17 @@ def patient_home(request):# 首頁
         """
         cursor.execute(getCanDoMotionQuery)
         motionList = cursor.fetchall()  # cursor.fetchone()[0]
-        print(motionList)
+
+        MotionList = []
+        for motion in motionList:
+            MotionList.append(list(motion))
+        for i in range(len(MotionList)):
+            MotionList[i][0] = str(int(MotionList[i][0].year)-1911) + "年" + str(MotionList[i][0].month) + "月" + str(MotionList[i][0].day) + "日"
+
+        print(MotionList)
+        print(5555)
+
+
         # 查詢通知
         getcontactrecord = f"""
         SELECT ct.content
@@ -136,7 +146,10 @@ def patient_Information(request):# 個人資訊
         WHERE p.id = '{request.session["paccount"]}'
         """
         cursor.execute(patientquery)
-        patient = cursor.fetchall()[0]  # cursor.fetchone()[0]
+        patient = list(cursor.fetchall()[0])  # cursor.fetchone()[0]
+        print(patient)
+        patient[3] = str(int(patient[3].year) - 1911) + "年" + str(patient[3].month) + "月" + str(patient[3].day) + "日"
+
 
         kinectquery = f"""
         SELECT ks.id, rr.startingdate,rr.duration, ks.status
@@ -145,10 +158,17 @@ def patient_Information(request):# 個人資訊
             LEFT JOIN AppProject_kinectstatus ks ON rr.kID_id = ks.id
         WHERE rr.pID_id = '{request.session["paccount"]}' AND ks.status = 0
         """
+        print(kinectquery)
         cursor.execute(kinectquery)
-        kinect = cursor.fetchall()[0]
+        k = cursor.fetchall()
+        print(len(k))
+        if len(cursor.fetchall()) > 0:
+            kinect = cursor.fetchall()[0]
+            time = datetime.strftime(kinect[1], '%Y 年 %m 月 %d 日')
+        else:
+            kinect = []
 
-        time = datetime.strftime(kinect[1],'%Y 年 %m 月 %d 日')
+
 
     template = "models/patientbase.html"
     return render(request, "patient_Information.html", locals())
@@ -165,7 +185,12 @@ def patient_medicalrecord(request):# 看診紀錄
                 """
         cursor.execute(medicalrecordquery)
         medicalrecordList = cursor.fetchall()  # cursor.fetchone()[0]
-
+        MedicalrecordList = []
+        for rehubrecord in medicalrecordList:
+            MedicalrecordList.append(list(rehubrecord))
+        for i in range(len(MedicalrecordList)):
+            MedicalrecordList[i][0] = str(int(MedicalrecordList[i][0].year) - 1911) + "年" + str(MedicalrecordList[i][0].month) + "月" + str(
+                MedicalrecordList[i][0].day) + "日"
 
     template = "models/patientbase.html"
     return render(request, "patient_medicalrecord.html", locals())
@@ -187,6 +212,13 @@ def patient_rehubrecord(request):# 復健紀錄
         """
         cursor.execute(rehubrecordquery)
         rehubrecordList = cursor.fetchall()  # cursor.fetchone()[0]
+
+        RehubrecordList = []
+        for rehubrecord in rehubrecordList:
+            RehubrecordList.append(list(rehubrecord))
+        for i in range(len(RehubrecordList)):
+            RehubrecordList[i][0] = str(int(RehubrecordList[i][0].year) - 1911) + "年" + str(RehubrecordList[i][0].month) + "月" + str(
+                RehubrecordList[i][0].day) + "日"
 
 
     template = "models/patientbase.html"
@@ -510,34 +542,3 @@ def rehabilitator_medicalrecord(request):
 
     return render(request, "rehabilitator_medicalrecord.html", locals())
 
-
-def patient_rehubrecord(request):
-    template = "models/rehabilitatorbase.html"
-    if "raccount" not in request.session:
-        return redirect('../patient_Login')
-    rid = Rehabilitator.objects.get(id=request.session["raccount"])
-    cursor = connection.cursor()
-    cursor.execute("select name , id from AppProject_patient "
-                   "WHERE id=(SELECT pID_id FROM AppProject_medicalrecord WHERE rID_id='" + request.session[
-                       "raccount"] + "')")
-
-    patients = cursor.fetchall()  # cursor.fetchone()[0]
-
-    if request.method != "POST":
-        mess = "表單資料尚未送出.."
-    else:
-        sel_patient = request.POST['sel_patient']
-        records = RehubRecord.objects.filter(pID_id=sel_patient)
-
-        cursor.execute("select distinct * from AppProject_patient "
-                       "WHERE id= '" + sel_patient + "'")
-        sel_patient_name = cursor.fetchall()  # cursor.fetchone()[0]
-    """
-    cursor = connection.cursor()
-    cursor.execute("select name , id from AppProject_patient "
-                   "WHERE id=(SELECT pID_id FROM AppProject_medicalrecord WHERE rID_id='"+request.session["raccount"]+"')")
-
-    patients = cursor.fetchall()  # cursor.fetchone()[0]
-    """
-
-    return render(request, "patient_rehubrecord.html", locals())

@@ -1,4 +1,4 @@
-# from CI.CI import SOCKET
-#
-# CI = SOCKET()
-# CI.startAccept()
+from CI.CI import SOCKET
+
+CI = SOCKET()
+CI.startAccept()

@@ -3,7 +3,7 @@ import json
 
 #目標，將CI傳來的指令，執行SQL指令，並回傳json格式的字串
 class SQLiteDatabase():
-    def __init__(self,dataBase = "../db.sqlite3"):
+    def __init__(self,dataBase = "db.sqlite3"):
         self.dataBase = dataBase
         
         
