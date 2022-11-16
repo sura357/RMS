@@ -6,35 +6,333 @@ from datetime import datetime
 from django.db import connection
 
 
+# Create your views here.
+def listone(request):
+    try:
+        unit = Test.objects.get(cName="Majjor2")  # 嘗試讀取Student裡面的資料
+    except():
+        errormessage = "(讀取錯誤!)"
+    return render(request, "listone.html", locals())
 
-###################################
-############### 前端 ###############
-###################################
 
-def getName(request):
-    if "paccount" in request.session:
-        cursor = connection.cursor()
+def listall(request):
+    tests = Test.objects.all().order_by('id')
+    return render(request, "listall.html", locals())
 
-        patientquery = f"""
-                SELECT p.name
-                FROM AppProject_patient p
-                WHERE p.id = '{request.session["paccount"]}'
-                """
-        cursor.execute(patientquery)
-        patient = cursor.fetchall()[0]  # cursor.fetchone()[0]
-        return patient[0]
-    return "None Name"
 
-def patient_Logout(request):# 登出
-    request.session.clear()
-    return redirect('../patient_Login')
+"""def register(request):
+    users = User.objects.all().order_by('id')
+    registerform = form.RegisterForm(request.POST)  # 如為空白是建立一個空白的物件
 
-def patient_Login(request):# 登入
+    if "account" in request.session:
+        template = "models/basesignup.html"
+        mess = "Data Received !"
+    else:
+        template = "models/base.html"
+        mess = "Data not found !"
+
+    if request.method == "POST":
+        if registerform.is_valid():  # 是否通過驗證
+            name = registerform.cleaned_data['cName']
+            account = registerform.cleaned_data['cAccount']
+            password = registerform.cleaned_data['cPassword']
+            sex = registerform.cleaned_data['cSex']
+            birthday = registerform.cleaned_data['cBirthday']
+            email = registerform.cleaned_data['cEmail']
+            phone = registerform.cleaned_data['cPhone']
+            addr = registerform.cleaned_data['cAddr']
+
+            for user in users:
+                if account == user.cAccount:
+                    mess = "Account has been register already !"
+                    return render(request, "register.html", locals())
+
+            unit = User.objects.create(cName=name, cAccount=account, cPassword=password, cSex=sex, cBirthday=birthday, cEmail=email, cPhone=phone, cAddr=addr)
+
+            unit.save()
+            mess = "Register successful !"
+        else:
+            mess = " Wrong Data !"
+    else:
+        mess = "表單資料尚未送出.."
+    return render(request, "register.html", locals())"""
+
+
+def index(request):
+    now = datetime.now()
+
+    if "raccount" in request.session:
+        template = "models/basesignup.html"
+        mess = "raccount session exsist!"
+        myuser = Rehabilitator.objects.get(id=request.session["raccount"])
+    else:
+        template = "models/base.html"
+        mess = "LogOut!"
+        return redirect('../login')
+
+    return render(request, "admins/index.html", locals())
+
+
+def login(request):
+    now = datetime.now()
+    template = "models/base.html"
+
     rusers = Rehabilitator.objects.all().order_by('id')
     pusers = Patient.objects.all().order_by('id')
+    # loginform = form.LoginForm(request.POST)  # 如為空白是建立一個空白的物件
+    if "raccount" in request.session:
+        return redirect('../index')
 
-    #request.session['paccount'] = "A144650796"#A109913910 - A144650796
+    if request.method != "POST":
+        mess = "表單資料尚未送出.."
+        return render(request, "admins/login.html", locals())
+    else:
+        account = request.POST['cAccount']
+        password = request.POST['cPassword']
+        for ruser in rusers:
+            if account != ruser.id:
+                mess = "User not exist !"
+            elif password != ruser.password:
+                mess = "Password not correct !"
+            else:
+                request.session["raccount"] = account
+                if request.session is not None:
+                    myuser = Rehabilitator.objects.get(id=request.session["raccount"])
+                    mess = "Data Received !"
+                else:
+                    mess = "Data not found !"
+                return redirect('../index')
 
+    return render(request, "admins/login.html", locals())
+
+
+def logout(request):
+    if "raccount" in request.session:
+        request.session.clear()  # 刪除所有session
+        request.session.flush()
+        # del request.session["account"]  # 刪除單一Session
+    return redirect('../login')
+
+
+def select_patient(request):
+    now = datetime.now()
+
+    if "raccount" in request.session:
+        template = "models/basesignup.html"
+        mess = "raccount session exsist!"
+        patients = Patient.objects.all().order_by('id')
+        myuser = Rehabilitator.objects.get(id=request.session["raccount"])
+
+    else:
+        template = "models/base.html"
+        mess = "LogOut!"
+        return redirect('../login')
+
+    return render(request, "admins/patients.html", locals())
+
+
+def patient_view(request):
+    if "raccount" in request.session:
+        template = "models/basesignup.html"
+        mess = "raccount session exsist!"
+        if 'id' in request.POST:
+            pid = request.POST["id"]
+
+    else:
+        template = "models/base.html"
+        mess = "LogOut!"
+        return redirect('../login')
+
+    return render(request, "admins/patients_view.html", locals())
+
+
+def plan_edit(request):
+    if "raccount" in request.session:
+        template = "models/basesignup.html"
+        mess = "raccount session exsist!"
+        if 'id' in request.POST:
+            pid = request.POST["id"]
+    else:
+        template = "models/base.html"
+        mess = "LogOut!"
+        return redirect('../login')
+
+    return render(request, "admins/plan_edit.html", locals())
+
+
+def patient_register(request):
+    if "raccount" in request.session:
+        template = "models/basesignup.html"
+        mess = "raccount session exsist!"
+        if 'id' in request.POST:
+            pid = request.POST["id"]
+    else:
+        template = "models/base.html"
+        mess = "LogOut!"
+        return redirect('../login')
+
+    return render(request, "admins/patients_register.html", locals())
+
+
+"""def userprofile(request):
+    now = datetime.now()
+    if "account" in request.session:
+        # myuserfields = User._meta.fields
+        myuser = User.objects.get(cAccount=request.session["account"])
+        template = "models/basesignup.html"
+        mess = "Data Received !"
+    else:
+        template = "models/base.html"
+        mess = "Data not found !"
+    return render(request, "userprofile.html", locals())
+
+
+def deleteuser(request, id=None):
+    users = User.objects.all().order_by('id')
+    try:
+        unit = User.objects.get(id=id)
+        unit.delete()
+
+        mess = "Delete complete!"
+        # return redirect('/index/')  # 這個可以用 只是紅蟲
+    except():
+        mess = "Can't not read!"
+    return redirect("../register.html")
+
+
+def product(request):
+    now = datetime.now()
+    if "account" in request.session:
+        template = "models/basesignup.html"
+        mess = "Data Received !"
+    else:
+        template = "models/base.html"
+        mess = "Data not found !"
+
+    products = Product.objects.all().order_by('id')
+    return render(request, "products.html", locals())
+
+
+def product_detail(request, id=None):
+    if "account" in request.session:
+        template = "models/basesignup.html"
+        mess = "Data Received !"
+    else:
+        template = "models/base.html"
+        mess = "Data not found !"
+
+    products = Product.objects.filter(id=id)
+    return render(request, "product_detail.html", locals())
+
+
+def buy(request, id=None):
+    if "account" in request.session:
+        template = "models/basesignup.html"
+        mess = "Data Received !"
+    else:
+        template = "models/base.html"
+        mess = "Data not found !"
+
+    if request.method == "GET":
+        account = request.session["account"]
+        id = id
+        name = Product.objects.values_list('pName', flat=True).filter(id=id)
+        price = Product.objects.values_list('pPrice', flat=True).filter(id=id)
+
+        buyproduct = Cart.objects.filter(pID=id).first()
+        if buyproduct is None:
+            amount = 1
+            unit = Cart.objects.create(cAccount=account, pID=id, pName=name, pPrice=price, pAmount=amount)
+            unit.save()
+        else:
+            buyproduct.pAmount += 1
+            buyproduct.save()
+
+        mess = "buy successful !"
+    else:
+        mess = "表單資料尚未送出.."
+
+    # url = "../products"
+    return render(request, "buy.html", locals())
+    # return redirect(url)
+
+
+def cart(request):
+    if "account" in request.session:
+        template = "models/basesignup.html"
+        mess = "Data Received !"
+    else:
+        return redirect('../products')
+
+    content = Cart.objects.filter(cAccount=request.session["account"])
+    count = content.count()
+    total = 0
+    for i in content:
+        total += i.pPrice
+
+    return render(request, "cart.html", locals())
+
+
+def orderconfirm(request):
+    if "account" in request.session:
+        template = "models/basesignup.html"
+        if request.method == "POST":  # 如果是以POST方式才處理
+            account = request.session["account"]
+            fname = request.POST['Fname']  # 取得表單輸入資料，在網頁上也要寫入mess變數，而網頁傳過來的username Django也要命名'username'
+            lname = request.POST['Lname']
+            caddr = request.POST['cAddr']
+            paymentmethod = request.POST['paymentMethod']
+            creditnum = request.POST['creditnum']
+            ccv = request.POST['CCV']
+            total = 0
+
+            deal = Cart.objects.all().filter(cAccount=account)
+            theorder = Order.objects.all().order_by('id').first()
+            oid = int(theorder.id)+1
+
+            for i in deal:
+                total += i.pPrice*i.pAmount
+                pid = i.pID
+                pname = i.pName
+                pprice = i.pPrice
+                pamount = i.pAmount
+                unit = Odetail.objects.create(oID=oid, pID=pid, pName=pname, pPrice=pprice, pAmount=pamount)
+                unit.save()
+
+            unit = Order.objects.create(cAccount=account, pUpdate="2022-05-01", cFname=fname, cLname=lname, cAddr=caddr,
+                                        cPayment=paymentmethod, cCreditnum=creditnum, cCCV=ccv, oTotal=total)
+            unit.save()
+
+
+            unit = Cart.objects.all().filter(cAccount=account)
+            unit.delete()
+            mess = "Data Received !"
+        else:
+            mess = "表單資料尚未送出.."
+
+    else:
+        return render(request, "orderconfirm.html", locals())
+
+    return render(request, "orderconfirm.html", locals())
+
+
+def orderprogress(request):
+    if "account" in request.session:
+        template = "models/basesignup.html"
+        if request.method == "POST":  # 如果是以POST方式才處理
+            mess = "Data Received !"
+        else:
+            mess = "表單資料尚未送出.."
+
+    else:
+        return render(request, "orderprogress.html", locals())
+
+    return render(request, "orderprogress.html", loc
+"""
+def patient_Login(request):  # 缺登入疑慮，只有使用者可以登
+    template = "models/patientbase.html"
+    rusers = Rehabilitator.objects.all().order_by('id')
+    pusers = Patient.objects.all().order_by('id')
     # loginform = form.LoginForm(request.POST)  # 如為空白是建立一個空白的物件
     if "raccount" in request.session:
         return redirect('../rehabilitator_Information')
@@ -45,7 +343,7 @@ def patient_Login(request):# 登入
     if request.method != "POST":
         mess = "表單資料尚未送出.."
     else:
-        account = request.POST['Account']
+        account = request.POST['cAccount']
         #  password = request.POST['cPassword']
 
         for ruser in rusers:
@@ -76,126 +374,35 @@ def patient_Login(request):# 登入
 
     return render(request, "patient_Login.html", locals())
 
-def patient_home(request):# 首頁
 
-    if "paccount" in request.session:
-        name = getName(request)
-        cursor = connection.cursor()
-
-        # 查詢可做動作
-        getCanDoMotionQuery = f"""
-        SELECT SetID, name
-        FROM AppProject_medicalrecord
-            LEFT JOIN AppProject_plan ON AppProject_medicalrecord.planID_id =  AppProject_plan.planID
-            LEFT JOIN AppProject_planset ON AppProject_plan.SetID_id =  AppProject_planset.id
-            LEFT JOIN AppProject_plansetmotion ON AppProject_planset.smID_id = AppProject_plansetmotion.id
-            LEFT JOIN AppProject_motion ON AppProject_plansetmotion.mID_id = AppProject_motion.id
-        WHERE AppProject_planset.SetID BETWEEN DATE('now','localtime','-7 days') AND DATE('now','localtime','+7 days')
-		    AND pID_id = '{request.session["paccount"]}'
-		ORDER BY datetime(AppProject_planset.SetID) ASC;
-        """
-        cursor.execute(getCanDoMotionQuery)
-        motionList = cursor.fetchall()  # cursor.fetchone()[0]
-        print(motionList)
-        # 查詢通知
-        getcontactrecord = f"""
-        SELECT ct.content
-        FROM AppProject_contactrecord ct
-        WHERE pID_id = '{request.session["paccount"]}'
-        ORDER BY ct.id DESC;
-        """
-        cursor.execute(getcontactrecord)
-        contactrecordList = cursor.fetchall()
+def logout(request):
+    if "raccount" in request.session:
+        request.session.clear()  # 刪除所有session
+        request.session.flush()
+        # del request.session["account"]  # 刪除單一Session
+    return redirect('../patient_Login')
 
 
-        # 查詢小知識
-        getrehuburl = f"""
-        SELECT id,content,url
-        FROM AppProject_rehuburl;
-        """
-        cursor.execute(getrehuburl)
-        rehuburlList = cursor.fetchall()
-
-        # print(rehuburlList)
-
-    else:
-        return redirect('../patient_Login')
-
-
+def patient_home(request):
     template = "models/patientbase.html"
     return render(request, "patient_home.html", locals())
 
-def patient_Information(request):# 個人資訊
-    if "paccount" in request.session:
-        name = getName(request)
-        cursor = connection.cursor()
 
-        patientquery = f"""
-        SELECT p.name, p.phonenumber, p.email, p.birthday
-        FROM AppProject_patient p
-        WHERE p.id = '{request.session["paccount"]}'
-        """
-        cursor.execute(patientquery)
-        patient = cursor.fetchall()[0]  # cursor.fetchone()[0]
-
-        kinectquery = f"""
-        SELECT ks.id, rr.startingdate,rr.duration, ks.status
-        FROM AppProject_rentalrecords rr
-            LEFT JOIN AppProject_patient p ON rr.pID_id = p.id
-            LEFT JOIN AppProject_kinectstatus ks ON rr.kID_id = ks.id
-        WHERE rr.pID_id = '{request.session["paccount"]}' AND ks.status = 0
-        """
-        cursor.execute(kinectquery)
-        kinect = cursor.fetchall()[0]
-
-        time = datetime.strftime(kinect[1],'%Y 年 %m 月 %d 日')
-
+def patient_Information(request):
     template = "models/patientbase.html"
     return render(request, "patient_Information.html", locals())
 
-def patient_medicalrecord(request):# 看診紀錄
-    if "paccount" in request.session:
-        name = getName(request)
-        cursor = connection.cursor()
 
-        medicalrecordquery = f"""
-        SELECT AppProject_medicalrecord.creating_date, AppProject_medicalrecord.disease,AppProject_medicalrecord.symptom,AppProject_medicalrecord.status
-        FROM AppProject_medicalrecord
-        WHERE pID_id = '{request.session["paccount"]}';
-                """
-        cursor.execute(medicalrecordquery)
-        medicalrecordList = cursor.fetchall()  # cursor.fetchone()[0]
-
-
+def patient_medicalrecord(request):
     template = "models/patientbase.html"
     return render(request, "patient_medicalrecord.html", locals())
 
-def patient_rehubrecord(request):# 復健紀錄
-    if "paccount" in request.session:
-        name = getName(request)
-        cursor = connection.cursor()
 
-        rehubrecordquery = f"""
-        SELECT ps.SetID, mr.disease,m.name, mr.planID_id ,rr.sid_id ,rr.accuracy
-        FROM AppProject_rehubrecord rr
-            LEFT JOIN AppProject_planset ps ON ps.id = rr.sid_id
-            LEFT JOIN AppProject_plansetmotion sm ON ps.smID_id = sm.sdID_id
-            LEFT JOIN AppProject_motion m ON m.id = sm.mID_id
-            LEFT JOIN AppProject_plan p ON ps.id = p.setID_id
-            LEFT JOIN AppProject_medicalrecord mr ON  p.planID = mr.planID_id
-        WHERE mr.pID_id = '{request.session["paccount"]}' & rr.accuracy is not NULL
-        """
-        cursor.execute(rehubrecordquery)
-        rehubrecordList = cursor.fetchall()  # cursor.fetchone()[0]
-
-
+def patient_rehubrecord(request):
     template = "models/patientbase.html"
     return render(request, "patient_rehubrecord.html", locals())
 
 
-
-###################################
-############### 後端 ###############
 ###################################
 def rehabilitator_Information(request):
     template = "models/rehabilitatorbase.html"
@@ -236,6 +443,7 @@ def rehabilitator_addPlan(request):
         sel_date = request.GET.getlist('selectedDate[]')
         set_details = request.GET.getlist('set_detail[]')
         plan_name = request.GET.get('planName')
+        planid = request.GET.get('planid')
         # aa = request.GET.get('aa')
         """data = json.loads(request.GET.get('aa'))
 
@@ -250,6 +458,7 @@ def rehabilitator_addPlan(request):
             print(sel_date)
             print(set_details)
             print(plan_name)
+            print(planid)
             #print(set_details[1])
             #print(set_details[1][1])
             # print(aa)
@@ -257,7 +466,11 @@ def rehabilitator_addPlan(request):
                            "from AppProject_plan")
             top_planid = cursor.fetchall()  # cursor.fetchone()[0]
             print(top_planid[0][0])
+
             top_planidnum = int(top_planid[0][0])+1
+
+            if planid != -1:
+                top_planidnum=planid
 
             for j in range(0, len(sel_date)):
                 temp = 0
@@ -277,21 +490,22 @@ def rehabilitator_addPlan(request):
                     cursor.execute("insert into AppProject_plansetmotion(id, mID_id, sdID_id) "
                                    "VALUES(NULL, '"+set_details_split[i*6]+"',(SELECT last_insert_rowid()))")
 
-                temp_date = sel_date[j][0:4]+"-"+sel_date[j][4:6]+"-"+sel_date[j][6:8]
-                cursor.execute("insert into AppProject_planset(id, SetID, smID_id) "  # orders
-                               "VALUES(NULL, '"+temp_date+"', (SELECT last_insert_rowid()))")  # "+str(temp)+"
+                    temp_date = sel_date[j][0:4] + "-" + sel_date[j][4:6] + "-" + sel_date[j][6:8]
+                    cursor.execute("insert into AppProject_planset(id, SetID, smID_id) "  # orders
+                                   "VALUES(NULL, '" + temp_date + "', (SELECT last_insert_rowid()))")  # "+str(temp)+"
 
-                cursor.execute("insert into AppProject_plan(id, planID, creating_date, setID_id, planName) "
-                               "VALUES("
-                               "NULL, "
-                               ""+str(top_planidnum)+", "  
-                               "date('now','localtime'), "
-                               "(SELECT last_insert_rowid()), '"+plan_name+"')")
+                    cursor.execute("insert into AppProject_plan(id, planID, creating_date, setID_id, planName) "
+                                   "VALUES("
+                                   "NULL, "
+                                   "" + str(top_planidnum) + ", "
+                                   "date('now','localtime'), "
+                                   "(SELECT last_insert_rowid()), '" + plan_name + "')")
+
             cursor.execute("INSERT INTO AppProject_medicalrecord"
                            "(id, creating_date, disease, symptom, status, pID_id, planID_id, rid_id, remark)"
                            "VALUES(NULL, date('now','localtime'), '', '', 0, '" + sel_patient + "', " + str(top_planidnum) + ", '" + rid.id + "', 'aa');")
 
-
+            return redirect('../rehabilitator_CheckPlan/?sel_patient=' + sel_patient)
         else:
             return redirect('../rehabilitator_CheckPlan/?sel_patient='+sel_patient)
 
@@ -312,6 +526,7 @@ def rehabilitator_checkPlan(request):
 
     patients = cursor.fetchall()  # cursor.fetchone()[0]
     # print(patients)
+    motions = Motion.objects.all()
 
     if request.method != "GET":
         mess = "表單資料尚未送出.."
@@ -326,15 +541,20 @@ def rehabilitator_checkPlan(request):
             sel_patient_name = cursor.fetchall()  # cursor.fetchone()[0]
             # print(sel_patient_name)
 
-            """cursor.execute("select planID_id "
+            cursor.execute("select distinct planID_id "
                             "from AppProject_medicalrecord "
                             "WHERE pID_id ='"+sel_patient+"'")
-            plans = cursor.fetchall()  # cursor.fetchone()[0]"""
-            plans = MedicalRecord.objects.filter(pID_id=sel_patient)
+            plans = cursor.fetchall()  # cursor.fetchone()[0]
+
+            # plans = MedicalRecord.objects.filter(pID_id=sel_patient)
             # print(plans)
 
         # print(request.GET.get('sel_plan'))
         if sel_plan is not None and sel_plan != "":
+            cursor.execute("SELECT planName,planID from AppProject_plan WHERE planID == '" + sel_plan + "'")
+            plan_name = cursor.fetchall()  # cursor.fetchone()[0]
+            print(plan_name)
+
             cursor.execute("select distinct SetID "
                            " from AppProject_planset "
                            " WHERE id in (SELECT setID_id from AppProject_plan WHERE planID == '"+sel_plan+"')")
@@ -414,7 +634,7 @@ def rehabilitator_rentalrecords(request):
     patients = cursor.fetchall()  # cursor.fetchone()[0]
     #print(patients)
 
-    kinects = KinectStatus.objects.filter(status=0)
+    kinects = KinectStatus.objects.filter(status=1)
     kinect_amount = kinects.count()
     print(kinects)
 
@@ -443,6 +663,42 @@ def rehabilitator_rentalrecords(request):
     return render(request, "rehabilitator_rentalrecords.html", locals())
 
 
+def rehabilitator_rentalback(request):
+    template = "models/rehabilitatorbase.html"
+    if "raccount" not in request.session:
+        return redirect('../patient_Login')
+    rid = Rehabilitator.objects.get(id=request.session["raccount"])
+
+    # patients = MedicalRecord.objects.filter(rID_id=request.session["raccount"])
+    cursor = connection.cursor()
+    cursor.execute("select name , id from AppProject_patient "
+                   "WHERE id=(SELECT pID_id FROM AppProject_medicalrecord WHERE rID_id='" + request.session[
+                       "raccount"] + "')")
+
+    patients = cursor.fetchall()  # cursor.fetchone()[0]
+    # print(patients)
+
+    kinects = KinectStatus.objects.filter(status=1)
+    kinect_amount = kinects.count()
+    print(kinects)
+
+    if request.method != "GET":
+        mess = "表單資料尚未送出.."
+    else:
+        sel_kinect = request.GET.get('sel_kinect')
+        print("sel_kinect:"+sel_kinect)
+        """print("sel_patient:"+sel_patient)
+        print("sel_date:"+sel_date)
+        print("period:"+period)"""
+        # print(sel_patient)
+
+        if sel_kinect is not None and sel_kinect != "":
+            cursor.execute("UPDATE AppProject_kinectstatus SET status = '0'"
+                           "WHERE id = " + sel_kinect + "")
+
+        #  password = request.POST['cPassword']
+    return render(request, "rehabilitator_rentalback.html", locals())
+
 def rehabilitator_rehubrecord(request):
     template = "models/rehabilitatorbase.html"
     if "raccount" not in request.session:
@@ -464,7 +720,7 @@ def rehabilitator_rehubrecord(request):
                        "WHERE id= '" + sel_patient + "'")
         sel_patient_name = cursor.fetchall()  # cursor.fetchone()[0]
         rehubrecordquery = f"""
-        SELECT ps.SetID, rr.times,rr.duration, rr.accuracy ,rr.progress
+        SELECT ps.SetID, rr.times,rr.duration, rr.accuracy ,rr.progress, p.planName
         FROM AppProject_rehubrecord rr
             LEFT JOIN AppProject_planset ps ON rr.sid_id = ps.id
             LEFT JOIN AppProject_plansetmotion psm ON ps.smID_id = psm.id

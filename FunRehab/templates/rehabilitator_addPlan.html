@@ -66,14 +66,15 @@
 			<div  class="reto-solid reto-block">
 			</div>
 			<article  class="monthly-right reto-right " id="style-scrollbar">
+                <br>
                 <select class='reto-div-input reto-div-select' id="sel_dates">
                 </select>
 				<ul id="actionGather">
 				<!-- 在最後呼叫新增動作事件 -->	
 				</ul>
-				<button id="addBtn" class="reto-add "><p class="horizaCenter">+</p></button>
+				<button id="addBtn" class="reto-add"><p class="horizaCenter">+</p></button>
 				<input id="saveBtn" class="reto-save" type="submit" value="存檔"/>
-			</article>
+            </article>
 		</div>
 </main>
 <footer> </footer>
@@ -121,21 +122,15 @@ var last_date;
 var Play=0;
 
 // 函式---
- function test(event){
-     console.log("fuck me");
-     $('.oof').append('<video class="div-to-display" id="TheNightNightShow" width="750" > ' +
-                    '<source src="{% static "sample_vids/StandUpComedy.mp4" %}" type="video/mp4" /> " + </video>');;
+ function vid_display(event){
+     $('.reto-display').append('<video class="reto-display-vid" id="TheNightNightShow" width="250" style="z-index: auto;position: absolute;top: -5px;right: 5%;" > ' +
+                    '<source src="{% static "sample_vids/StandUpComedy.mp4" %}" type="video/mp4" /> " + </video>');
+     document.getElementById("TheNightNightShow").play();
  }
 
- function MusicControl(x){
-	if(x=='start'&&Play==0){
-		Play=1;
-		document.getElementById("TheNightNightShow").play();
-	}else if(x=='start'&&Play==1){
-		Play=0;
-		document.getElementById("TheNightNightShow").pause();
-	}
-}
+ function vid_remove(event){
+     $('.reto-display-vid').remove();
+ }
 
 function clear_action()  // 清空動作
 {
@@ -182,7 +177,7 @@ function return_action(selectName, printdata)  // 回傳動作字串 // 動作�
 					</div>\
 					<div class='reto-poject-in'>\
 						<p class='reto-poject-p-div'>\
-						<select class='reto-div-input reto-div-select oof' id='"+sel_date.value+"name"+j+"' onmouseenter='test(this)'>";
+						<select class='reto-div-input reto-div-select' id='"+sel_date.value+"name"+j+"' onmouseenter='vid_display(this)' onmouseleave='vid_remove(this)'>";
 
                 for(var i=0;i<selectName.length;i++) {
                     console.log(selectName[i])
@@ -234,6 +229,9 @@ function return_action(selectName, printdata)  // 回傳動作字串 // 動作�
                                     <p class='reto-poject-p-div'><input class='reto-div-input' type='text' id='"+sel_date.value+"duration"+Action_amount[sel_date.value]+"'/></p>\
                                     <p class='reto-poject-p-div'><input class='reto-div-input' type='text' id='"+sel_date.value+"type"+Action_amount[sel_date.value]+"'/></p>\
                                     <p class='reto-poject-p-div'><input class='reto-div-input' type='text' id='"+sel_date.value+"motion_time"+Action_amount[sel_date.value]+"'/></p>\
+                                </div>\
+                                <div>\
+                                <button id='addBtn' class='reto-display' onmouseenter='vid_display()' onmouseleave='vid_remove(this)'><p class='horizaCenter'>View</p></button>\
                                 </div>\
                             </li>";
     }
@@ -325,8 +323,9 @@ $('#saveBtn').click(function () {
     $.ajax({
         type: 'GET',
         url: '/rehabilitator_addPlan',
-        data: {'sel_patient': '{{sel_patient}}','selectedDate[]':selectedDate,'set_detail[]':set_detail,'planName':planName.value}
+        data: {'sel_patient': '{{sel_patient}}','selectedDate[]':selectedDate,'set_detail[]':set_detail,'planName':planName.value,'planid':-1}
     });
+    alert('存檔成功 !');
 });
 
  </script>

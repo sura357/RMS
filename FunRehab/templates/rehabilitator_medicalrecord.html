@@ -65,7 +65,7 @@
 		<table style="width: 100%;text-align: center;font-size: 18pt;font-weight: bold;">
             <tr>
                 <td style="width: 20%;">
-                　　{{ record.creating_date }}
+                    民國{{ record.creating_date|date:"Y" |add:"-1911"}}年{{ record.creating_date|date:"m" }}月{{ record.creating_date|date:"d" }}日
                 </td>
                 <td style="width: 15%;">
                     {{ record.disease }}
