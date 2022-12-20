@@ -170,11 +170,13 @@ class RehubRecord(models.Model):
 
 
 class Plan(models.Model):
+    """
     class Meta:
         unique_together = (('id', 'setID'),)
 
+    """
     id = models.AutoField(primary_key=True)
-    planID = models.PositiveIntegerField(null=False)
+    planID = models.IntegerField(null=False)
     planName = models.CharField(max_length=40, null=True)
     setID = models.ForeignKey(PlanSet, on_delete=models.CASCADE, to_field='id')
     creating_date = models.DateField(max_length=14, null=False)
@@ -197,13 +199,16 @@ class PlanCart(models.Model):
 
 
 class MedicalRecord(models.Model):
+    """
     class Meta:
         unique_together = (('rID', 'pID', 'planID'),)
+        """
 
     id = models.AutoField(primary_key=True)
     rID = models.ForeignKey(Rehabilitator, on_delete=models.CASCADE, to_field='id')
     pID = models.ForeignKey(Patient, on_delete=models.CASCADE, to_field='id')
-    planID = models.ForeignKey(Plan, on_delete=models.CASCADE, to_field='id')
+    # planID = models.ForeignKey(Plan, on_delete=models.CASCADE, to_field='id')
+    planID = models.IntegerField()
     creating_date = models.DateField(max_length=16, null=False)
     disease = models.CharField(max_length=30, null=False)
     symptom = models.CharField(max_length=40, null=False)

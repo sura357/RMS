@@ -1,7 +1,7 @@
 
 {% extends template %}
 {% block content %}
-    <meta http-equiv="refresh" content="5" />
+    <meta http-equiv="refresh" content="500" />
 <style type="text/css">
 *{
     padding: 0;
@@ -166,12 +166,12 @@ html,body{
 		<article class="task_data">
 			<div class="lab style-scrollbar">
                 {% for motion in MotionList %}
-                    <div class="case1" style="background: #E85B5E;">
+                    <div class="case1" style="background: #20c997;">
                         {{motion.0}}
                         <br>
                         {{motion.1}}
                         <br>
-                        <a href="RehabilitationMotion://55688" id="{{motion.1}}" name="{{motion.1}}" >
+                        <a href="LoginElf://{{ request.session.paccount }}" id="{{motion.1}}" name="{{motion.1}}" >
                             <img src="../static/pic/rehabilitation.png" width="auto" height="120" alt=""/>
                         </a>
                     </div>

@@ -79,16 +79,14 @@ html,body{
 </head>
 <body>
 	<div class="BackGround">
-	  <img class="LOGO" src="../static/pic/home_Logo.png" width="10%" height="auto" alt=""/>復健GO<br>
+	  <img class="LOGO" src="../static/pic/home_Logo.png" width="40%" height="auto" alt=""/><br>
         <form method="post" action="../patient_Login/" >
             {% csrf_token %}
           <div class="Login">
                 身分證字號:
                 <input type="text" class="input" size="12" maxlength="10" name="Account">
             </div>
-            <a href="LoginElf://A144650796" id="{{motion.1}}" name="{{motion.1}}" >
             <input type="submit" value="登入" class="Button">
-            </a>
         </form>
 		<div class="botton">
 		<hr size="8px"  width="95%" color="#3040ED" align="right" class="Line">

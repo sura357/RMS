@@ -44,7 +44,7 @@
         <td  style="width: 20%;">
             復健計畫名稱
 		</td>
-		<td style="width: 20%;">
+		<td style="width: 25%;">
             復健日期
 		</td>
 		<td style="width: 15%;">
@@ -64,10 +64,10 @@
 	<table style="width: 100%;font-size: 18pt;font-weight: bold;text-align: center;">
 	<tr>
         <td  style="width: 20%;">
-		    {{ record.0 }}
+		    {{ record.5 }}
 		</td>
-		<td style="width: 20% ;text-indent: 40px;">
-            {{ record.0 }}
+		<td style="width: 25% ;text-indent: 40px;">
+            民國{{ record.0 |date:"Y" |add:"-1911"}}年{{ record.0 |date:"m"}}月{{ record.0 |date:"d"}}日
 		</td>
 		<td style="width: 15%;">
 		    {{ record.1 }}次

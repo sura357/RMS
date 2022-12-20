@@ -30,6 +30,24 @@
     border-style: none;
 	margin-left: 1%;
 }
+.scrollbar-style-both::-webkit-scrollbar-thumb {
+    background-color: #ADB9CA;
+    border-radius: 15px;
+}
+.scrollbar-style-both::-webkit-scrollbar-track {
+    background-color: #F2F2F2;
+    border-radius: 15px;
+}
+.scrollbar-style-both::-webkit-scrollbar {
+    width: 20px;
+    background-color: black;
+    background-color: rgba(0,0,0,0.00);
+}
+
+.scrollbar-style-both{
+	overflow: auto;
+	white-space: nowrap;
+}
 
 .reto-project{
 	padding-top: 2%;
@@ -43,7 +61,7 @@
 }
 
 .reto-monthly{
-	height: 77.5%;
+	height: 65%;
     width: 100%;
 	font-size: 14pt !important;	
 	border-spacing: 2px !important;	
@@ -73,6 +91,10 @@
     border: 2pt dashed rgba(255,0,0,1.00) !important;
 }
 
+.reto-scrollbar{
+    overflow: auto;
+}
+
 .reto-left{
 	margin-right: 50px;
 	width: 40% !important;
@@ -90,7 +112,6 @@
 	padding: 1% !important;
 	margin-bottom: 2% !important;
   	overflow-y: auto;
-	overflow-y: hidden;
 }
 
 .reto-div{
@@ -102,7 +123,8 @@
     background-color: #FBE5D6;
 	width: 100% !important;
 	padding: 10px;
-	margin-bottom: 5px;
+	margin-top: 15px;
+	margin-bottom: 15px;
 }
 
 .reto-div-input{
@@ -149,7 +171,7 @@
 }
 
 .reto-poject-in{
-	width: 60%;
+	width: 40%;
 	display: inline-block !important;
     font-size: 20pt;
     font-weight: bold;
@@ -177,6 +199,69 @@
     margin-left: 6%;
     font-size: 32pt;
     border-width: 0px;	
+}
+
+.reto-delete{
+    display: flex !important;
+    justify-content: flex-start !important;
+    text-align: center!important;
+    border-radius: 20px;
+    background-color: #6a1a21;
+    width: 94%;
+    margin-left: 6%;
+    font-size: 24pt;
+    border-width: 0px;
+}
+
+.reto-display{
+    display: flex !important;
+    justify-content: flex-start !important;
+    text-align: center!important;
+    border-radius: 20px;
+    background-color: #F8CBAD;
+    width: 94%;
+    margin-left: 6%;
+    font-size: 24pt;
+    border-width: 0px;
+}
+
+.reto-display-square {
+    display: flex !important;
+    justify-content: center;
+    text-align: center!important;
+    border-radius: 20px;
+    background-color: #F8CBAD;
+    /*padding-left: 15px;*/
+    width: 50px;
+    font-size: 32pt;
+    border-width: 0px;
+}
+
+.hide {
+  display: none;
+	padding: 5px 0;
+  border-radius: 6px;
+	width: 100px;
+  /* Position the tooltip text - see examples below! */
+  position: absolute;
+  z-index: 1;
+}
+
+.reto-display-vid:hover + .hide {
+  display: block;
+}
+
+.reto-display-add{
+    display: flex !important;
+    justify-content: flex-start !important;
+    text-align: left!important;
+
+	border-radius: 20px;
+    background-color: #FBE5D6;
+	width: 550px !important;
+	padding: 10px;
+	margin-top: 15px;
+	margin-bottom: 15px;
 }
 
 .reto-save{
@@ -258,7 +343,7 @@
 	position: relative;
 	margin: 10px;
 	padding: 1%;
-  	overflow-y: auto;
+
 }
 
 .monthly-btn{
@@ -354,8 +439,68 @@
 #style-scrollbar::-webkit-scrollbar-track {
 	background-color: #F2F2F2;
 	border-radius: 0px 15px 15px 0px;
-	
+
 }
+
+/*捲軸寬度*/
+#style-scrollbar::-webkit-scrollbar {
+	width: 20px;
+	background-color: black;
+	background-color: rgba(0,0,0,0.00);
+}
+
+/*捲軸本體顏色*/
+#style-scrollbar::-webkit-scrollbar-thumb {
+	background-color: #ADB9CA;
+	border-radius: 15px;
+}
+
+	/*捲軸底色*/
+#style-scrollbar-x::-webkit-scrollbar-track {
+	background-color: #F2F2F2;
+	border-radius: 15px;
+
+}
+
+/*捲軸寬度*/
+#style-scrollbar-x::-webkit-scrollbar {
+	width: 20px;
+	background-color: black;
+	background-color: rgba(0,0,0,0.00);
+}
+
+/*捲軸本體顏色*/
+#style-scrollbar-x::-webkit-scrollbar-thumb {
+	background-color: #ADB9CA;
+	border-radius: 15px;
+}
+
+
+	/*捲軸底色*/
+#style-scrollbar-x::-webkit-scrollbar-track {
+	background-color: #F2F2F2;
+	border-radius: 15px;
+
+}
+
+/*捲軸寬度*/
+#style-scrollbar-x::-webkit-scrollbar {
+	width: 20px;
+	background-color: black;
+	background-color: rgba(0,0,0,0.00);
+}
+
+/*捲軸本體顏色*/
+#style-scrollbar-x::-webkit-scrollbar-thumb {
+	background-color: #ADB9CA;
+	border-radius: 15px;
+}
+
+.div-to-display{
+	z-index: 1;
+	visibility: visible;
+}
+
 
 /*捲軸寬度*/
 #style-scrollbar::-webkit-scrollbar {

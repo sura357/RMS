@@ -31,21 +31,28 @@ urlpatterns = [
     # path('patient_register/', patient_register),
 
     # 前端
+    path('', patient_Login),
     path('patient_Login/', patient_Login),
     path('patient_Logout/', patient_Logout),
     path('patient_home/', patient_home),
     path('patient_Information/', patient_Information),
     path('patient_medicalrecord/', patient_medicalrecord),
     path('patient_rehubrecord/', patient_rehubrecord),
+    path('test/', test),
 
     # 後端
+    path('admin/', admin.site.urls),
+    path('logout/', logout),
+
     path('rehabilitator_Information/', rehabilitator_Information),
     path('rehabilitator_CheckPlan/', rehabilitator_checkPlan),
     path('rehabilitator_addPlan/', rehabilitator_addPlan),
     path('rehabilitator_contactrecord/', rehabilitator_contactrecord),
     path('rehabilitator_rentalrecords/', rehabilitator_rentalrecords),
+    path('rehabilitator_rentalback/', rehabilitator_rentalback),
     path('rehabilitator_rehubrecord/', rehabilitator_rehubrecord),
     path('rehabilitator_medicalrecord/', rehabilitator_medicalrecord),
+    path('rehabilitator_deletePlan/', rehabilitator_deletePlan),
 
 
 

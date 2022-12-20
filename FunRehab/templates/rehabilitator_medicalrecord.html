@@ -65,7 +65,7 @@
 		<table style="width: 100%;text-align: center;font-size: 18pt;font-weight: bold;">
             <tr>
                 <td style="width: 20%;">
-                　　{{ record.creating_date }}
+                    民國{{ record.creating_date|date:"Y" |add:"-1911"}}年{{ record.creating_date|date:"m" }}月{{ record.creating_date|date:"d" }}日
                 </td>
                 <td style="width: 15%;">
                     {{ record.disease }}
@@ -74,13 +74,15 @@
                     {{ record.symptom }}
                 </td>
                 <td  style="width: 20%;">
-                    <a href="../rehabilitator_CheckPlan?sel_plan={{ record.planID_id }}&sel_patient={{ sel_patient }}" >{{ record.planID_id }}</a>
+                    <a href="../rehabilitator_CheckPlan?sel_plan={{ record.planID }}&sel_patient={{ sel_patient }}" >{{ record.planID }}</a>
                 </td>
                 <td  style="width: 15%;">
                     {% if record.status == 0 %}
-                        良好
+                        未完成
+                    {% elif record.status == 1 %}
+                        復健中
                     {% else %}
-                        治療中
+                        已完成
                     {% endif %} 
                 </td>
             </tr>

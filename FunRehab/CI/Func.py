@@ -7,7 +7,7 @@ import os
 
 class FUNC():
     def __init__(self):
-        self.fileDir = "Resource"
+        self.fileDir = "static\\Resource"
         self.BUFFER_SIZE = 10240 * 10240
 
         # RSS = 0
@@ -25,7 +25,7 @@ class FUNC():
         URS = {0:URSconnect,1:URSselect,2:URSInsert,3:None,4:URSFile}
 
         self.Switch = {0:RSS,1:None,2:URS}
-        self.sqlite =  SQLiteDatabase()
+        self.sqlite = SQLiteDatabase()
 
     def RMS_Response(self,obj):
         # 組織返回封包
@@ -210,7 +210,7 @@ class FUNC():
         with open(r'%s\%s' % (self.fileDir, data["standard_file"]), 'rb') as f:
             obj[0].send(f.read(self.BUFFER_SIZE))
                 
-            while predict_send_times > 0:      
+            while predict_send_times > 0:
                 obj[0].send(f.read(self.BUFFER_SIZE))
                 predict_send_times -= 1
 
@@ -256,10 +256,10 @@ class FUNC():
         SELECT 	AppProject_medicalrecord.disease,
                 AppProject_medicalrecord.symptom,
                 AppProject_medicalrecord.status,
-                AppProject_medicalrecord.planID_id,
+                AppProject_medicalrecord.planID,
                 AppProject_medicalrecord.rID_id
         FROM AppProject_medicalrecord
-            LEFT JOIN AppProject_plan ON AppProject_medicalrecord.planID_id =  AppProject_plan.planID
+            LEFT JOIN AppProject_plan ON AppProject_medicalrecord.planID =  AppProject_plan.planID
             LEFT JOIN AppProject_planset ON AppProject_plan.SetID_id =  AppProject_planset.id
         WHERE AppProject_planset.SetID BETWEEN DATE('now','localtime','-7 days') AND DATE('now','localtime')
             AND AppProject_medicalrecord.pID_id = '{data["id"]}';
@@ -267,37 +267,38 @@ class FUNC():
         #
         queryMotion = f"""
         SELECT
-            AppProject_planset.SetID as date_,
-            AppProject_planset.id as sid,
-            AppProject_plansetmotion.id as smid,
-            AppProject_plansetmotion.mID_id as mid,
-            AppProject_plansetmotion.sdID_id,
-            AppProject_motion.game_id_id,
+            planset.SetID as date_,
+            planset.id as sid,
+            setmotion.id as smid,
+            setmotion.mID_id as mid,
+            setmotion.sdID_id,
+            motion.game_id_id,
             
-            AppProject_motion.name,
-            AppProject_motion.type,
-            AppProject_motion.bodypart,
-            AppProject_plansetdetail.duration,
-            AppProject_plansetdetail.times,
-            AppProject_plansetdetail.breadtime,
-            AppProject_plansetdetail.ontop_duration,
-            AppProject_plansetdetail.motion_time,
+            motion.name,
+            motion.type,
+            motion.bodypart,
+            setdetail.duration,
+            setdetail.times,
+            setdetail.breadtime,
+            setdetail.ontop_duration,
+            setdetail.motion_time,
             
-            AppProject_motion.video_file,
-            AppProject_motion.standard_file,
-            AppProject_gamesample.game_file
-        FROM AppProject_medicalrecord
-            LEFT JOIN AppProject_plan ON AppProject_medicalrecord.planID_id =  AppProject_plan.planID
-            LEFT JOIN AppProject_planset ON AppProject_plan.SetID_id =  AppProject_planset.id
-            LEFT JOIN AppProject_plansetmotion ON AppProject_planset.smID_id = AppProject_plansetmotion.id
-            LEFT JOIN AppProject_plansetdetail ON AppProject_plansetmotion.sdID_id =  AppProject_plansetdetail.id
-            LEFT JOIN AppProject_motion ON AppProject_plansetmotion.mID_id = AppProject_motion.id
-            LEFT JOIN AppProject_rehubrecord ON AppProject_planset.id = AppProject_rehubrecord.sid_id
-            LEFT JOIN AppProject_gamesample ON AppProject_gamesample.id = AppProject_motion.game_id_id
+            motion.video_file,
+            motion.standard_file,
+            game.game_file,
+            game.description
+        FROM AppProject_medicalrecord as medicalrecord
+            LEFT JOIN AppProject_plan plan ON medicalrecord.planID =  plan.planID
+            LEFT JOIN AppProject_planset planset ON plan.SetID_id =  planset.id
+            LEFT JOIN AppProject_plansetmotion setmotion ON planset.smID_id = setmotion.id
+            LEFT JOIN AppProject_plansetdetail setdetail ON setmotion.sdID_id =  setdetail.id
+            LEFT JOIN AppProject_motion motion ON setmotion.mID_id = motion.id
+            LEFT JOIN AppProject_rehubrecord rehubrecord ON planset.id = rehubrecord.sid_id
+            LEFT JOIN AppProject_gamesample game ON game.id = motion.game_id_id
         WHERE date_ BETWEEN DATE('now','localtime','-7 days') AND DATE('now','localtime')
-            AND AppProject_medicalrecord.pID_id = '{data["id"]}'
-            AND AppProject_medicalrecord.status = 0 
-            AND AppProject_rehubrecord.sid_id IS NULL
+            AND medicalrecord.pID_id = '{data["id"]}'
+            AND medicalrecord.status = 0 
+            AND rehubrecord.sid_id IS NULL
         ORDER BY datetime(date_) ASC, smid ASC;
         """
 
@@ -317,7 +318,7 @@ class FUNC():
         query = f"""
         SELECT  *
         FROM AppProject_medicalrecord
-            LEFT JOIN AppProject_plan ON AppProject_medicalrecord.planID_id =  AppProject_plan.planID
+            LEFT JOIN AppProject_plan ON AppProject_medicalrecord.planID =  AppProject_plan.planID
             LEFT JOIN AppProject_planset ON AppProject_plan.SetID_id =  AppProject_planset.id
             LEFT JOIN AppProject_rehubrecord ON AppProject_planset.id =  AppProject_rehubrecord.sID_id
         WHERE AppProject_medicalrecord.pID_id = '{data["id"]}' 

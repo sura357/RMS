@@ -5,7 +5,7 @@
 {% block content %}
 <main class="in-main">
 	<div class="title">
-		復健紀錄
+		復健計畫
 	</div>
     <div style="font-size: 18pt;font-weight: bold;width: 95%;height: 5%;margin-left: 2%;">
         {% if sel_patient != null or sel_plan != null %}
@@ -38,81 +38,196 @@
                 {% endif %}
 
                 {% for plan in plans %}
-                    {% if sel_plan ==  plan.id  %}
-                        <option value="{{ plan.id }}" selected="selected" > {{ plan.id }}</option>
+                    {% if sel_plan ==  plan.0  %}
+                        <option value="{{ plan.0 }}" selected="selected" > {{ plan.0 }}</option>
                     {% else %}
-                        <option value="{{ plan.id }}" > {{ plan.id }}</option>
+                        <option value="{{ plan.0 }}" > {{ plan.0 }}</option>
                     {% endif %}
                 {% endfor %}
             </select>　　
             <input class="reto-btn-patient" type="button" value="新增復健計畫" onclick="location.href='../rehabilitator_addPlan/?sel_patient={{ sel_patient }}'" >
         </form>
 	</div>
-	<div class="main-container reto-project reto-project-new" >
+	<div class="main-container reto-project reto-project-new" id="style-scrollbar-x" >
 		<article class="reto-project-top">
 		</article>
-		<article class="reto-project-botton reto-scrollbar"  id="reto-x-scrollbar" >
+		<article class="reto-project-botton reto-scrollbar scrollbar-style-both"  >
 			<span class="reto-nor">
             {% for set in plans_sets %}
-			<button class="btn reto-date-project reto-scrollbar" style="font-family: '微軟正黑體';font-weight: bold;font-size: 24pt;vertical-align: text-top;" type="button"><!-- data-bs-toggle="modal" data-bs-target="#exampleModal"-->
-                <p>{{ set.0 }}</p>
+			<button class="btn reto-date-project" style="font-family: '微軟正黑體';font-weight: bold;font-size: 24pt;vertical-align: text-top;" type="button"><!-- data-bs-toggle="modal" data-bs-target="#exampleModal"-->
+                <p>民國{{ set.0|date:"Y" |add:"-1911"}}年{{ set.0|date:"m" }}月{{ set.0|date:"d" }}日</p>
                 <img src="{% static "pic/rehabilitation.png" %}" width="auto" height="120" alt=""/>
+                <div class="scrollbar-style-both" style="height: 300px">
                 <hr size="8px"  width="95%" align="center" class="reto-line">
                 {% for content in sets_content %}
                     {% if set.0 == content.1 %}
                             <!-- href aria-controls=控制對應ID -->
-                        <p data-bs-toggle="collapse" href="#aa{{ content.0 }}" role="button" aria-expanded="false" aria-controls="multiCollapseExample1">動作: {{ content.10 }}</p>
+                    <table>
+                        <tr>
+                            <td style="font-family: '微軟正黑體';font-weight: bold;font-size: 24pt;">
+                                <div data-bs-toggle="collapse" href="#aa{{ content.0 }}" role="button" aria-expanded="false" aria-controls="multiCollapseExample1">
+                                    動作: {{ content.9 }}
+                                </div>
+                            </td>
+                            <td>
+                                <label onclick="delete_motion({{ content.5 }})" id='{{ content.0 }}' class='reto-display-square' >-</label>
+                            </td>
+                        </tr>
+                    </table>
                         <!--<button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#multiCollapseExample2" aria-expanded="false" aria-controls="multiCollapseExample2">Toggle second element</button>
                         <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target=".multi-collapse" aria-expanded="false" aria-controls="multiCollapseExample1 multiCollapseExample2">Toggle both elements</button>-->
-                        <div class="collapse multi-collapse" id="aa{{ content.0 }}"> <!-- use id to target -->
+                        <div class="collapse multi-collapse" id="aa{{ content.0 }}" style="text-align: left"> <!-- use id to target -->
                             {% for sd_content in sd_contents %}
-
                                 {% if sd_content.14 == content.5 %}
-                                    持續時間:{{ sd_content.15 }}<br>
-                                    次數:{{ sd_content.16 }}<br>
-                                    休息時間:{{ sd_content.17 }}<br>
-                                    頂點維持時間:{{ sd_content.18 }}<br>
-                                    類型:{{ sd_content.19 }}<br>
+                                    持續時間: {{ sd_content.15 }}秒<br>
+                                    次數: {{ sd_content.16 }}次<br>
+                                    休息時間: {{ sd_content.17 }}秒<br>
+                                    頂點維持時間: {{ sd_content.18 }}秒<br>
+                                    類型:
+                                    {% if sd_content.19 == 0 %}
+                                        靜態
+                                    {% else %}
+                                        動態
+                                    {% endif %}<br>
                                 {% endif %}
                             {% endfor %}
                         </div>
                         <hr size="8px"  width="95%" align="center" class="reto-line">
+
+
                     {% endif %}
                 {% endfor %}
+                </div>
+                <label id='addBtn' class='reto-display-square' style="width: 370px;" onclick='add_display({{ set.0|date:"Y" }}{{ set.0|date:"m" }}{{ set.0|date:"d" }})' >+</label>
 			</button>
             {% endfor %}
 			</span>
 		</article>
-
-        <article>
-
-        </article>
 	</div>
 </main>
-<!-- Modal內容 -->
-<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" style="margin-left: 500px">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">2022年10月24日</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-		<p>動作1</p>
-		<p>動作名稱:超級無敵厲害</p>
-		<p>動作次數:10次</p>
-		<p>休息時間:10秒</p>
-		<p>頂點時間:20秒</p>
-		<p>動作類型:肩關節</p>
-		<p>花費時間:30秒</p>
-		<hr size="8px"  width="95%" align="center" class="reto-line">
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn " data-bs-dismiss="modal">關閉</button>
-      </div>
-    </div>
-  </div>
-</div>
+<script>
+var presetAction =
+    [
+    {% for motion in motions %}
+        [
+            "{{ motion.name }}",
+            "{{ motion.video_file }}",
+            "{{ motion.id }}"
+        ],
+    {% endfor %}
+    ];// 動作有哪些
+console.log(presetAction);
+var set_detail= [];
+var selectedDate = [];
+var planName = document.getElementById("planName");  // 計畫名稱
+var addBtn = document.getElementById("addBtn");  // 新增按鈕
+var saveBtn = document.getElementById("saveBtn");  // 存檔按鈕
+
+function delete_motion(sd_id){
+    console.log("刪除");
+
+    $.ajax({
+        type: 'GET',
+        url: '/rehabilitator_deletePlan',
+        data: {'sel_patient': '{{sel_patient}}', 'sd_id': sd_id, 'sel_plan': '{{sel_plan}}'}
+    });
+    alert('刪除成功 !');
+}
+
+function add_display(sel_date){
+    set_detail= [];
+    selectedDate = [];
+    selectedDate.push(sel_date);
+    var actionHtml = "<li class='reto-div horizaCenter reto-display-add' style='z-index: auto;position: absolute;top: 30%;right: 5%;' id=''>\
+					<div class='reto-poject-p'>\
+						<p>動作名稱</p>\
+						<p>動作次數</p>\
+						<p>休息時間</p>\
+						<p>維持時間</p>\
+						<p>動作類型</p>\
+						<p>動作花費時間</p>\
+					</div>\
+					<div class='reto-poject-in'>\
+						<p class='reto-poject-p-div'>\
+						<select class='reto-div-input reto-div-select' id='name' >";
+
+
+        for(var i=0;i<presetAction.length;i++)
+        {
+            console.log(presetAction[i])
+
+            actionHtml = actionHtml + "<option name='"+presetAction[i][1]+"' value="+presetAction[i][2]+">" + presetAction[i][0] + "</option>";
+        }
+
+            actionHtml = actionHtml + "</select>\
+                                    </p>\
+                                    <p class='reto-poject-p-div'><input class='reto-div-input' type='text' id='times'/></p>\
+                                    <p class='reto-poject-p-div'><input class='reto-div-input' type='text' id='breadtime'/></p>\
+                                    <p class='reto-poject-p-div'><input class='reto-div-input' type='text' id='duration'/></p>\
+                                    <p class='reto-poject-p-div'><select class='reto-div-input reto-div-select' id='type' >\
+                                    <option value=0>靜態</option>\
+                                    <option value=1>動態</option>\
+                                    </select></p>\
+                                    <p class='reto-poject-p-div'><input class='reto-div-input' type='text' id='motion_time'/></p>\
+                                </div>\
+                                <div>\
+                                <button id='viewBtn' class='reto-display' onmouseenter='vid_display(this)' onmouseleave='vid_remove()'><p class='horizaCenter'>View</p></button>\
+                                </div>\
+                                <div>\
+                                <button id='deleteBtn' class='reto-delete' onmousedown='add_remove()'><p class='horizaCenter'>X</p></button>\
+                                </div>\
+                                <button id='' class='reto-save' style='margin-top: 45%' onclick='save("+sel_date+")'><p class='horizaCenter'>存檔</p></button>\
+                            </li>";
+    $('.reto-display-add').remove();
+    $('body').append(actionHtml);
+ }
+
+ function add_remove(event){
+     $('.reto-display-add').remove();
+ }
+
+ function vid_display(event){
+    console.log("videoname:"+$('#name').find('option:selected').attr('name'))
+     $(event).append('<video class="reto-display-vid" id="TheNightNightShow" width="250" style="z-index: auto;position: absolute;right: 5%;" > ' +
+                    '<source src="{% static "Resource/Video/" %}'+$('#name').find('option:selected').attr('name')+'" type="video/mp4" /> " + </video>');
+     document.getElementById("TheNightNightShow").play();
+ }
+
+ function vid_remove(event){
+     $('.reto-display-vid').remove();
+ }
+
+ function save(sel_date){
+    console.log("存檔");
+    console.log(sel_date);
+    set_detail[0]=[];
+        set_detail[0][0] = []
+        set_detail[0][0] = [
+                document.getElementById("name").value,
+                document.getElementById("times").value,
+                document.getElementById("breadtime").value,
+                document.getElementById("duration").value,
+                document.getElementById("type").value,
+                document.getElementById("motion_time").value
+        ];
+        console.log(selectedDate)
+        console.log(set_detail);
+        console.log("i:"+0+"+setdetail"+set_detail[0][0]);
+
+    /*var timeoutID = setTimeout(myAlert, 5000);
+
+    function myAlert() {
+        alert('五秒鐘到了！');
+    }"*/
+    //console.log(aa);
+    $.ajax({
+        type: 'GET',
+        url: '/rehabilitator_addPlan',
+        data: {'sel_patient': '{{sel_patient}}','selectedDate[]':selectedDate,'set_detail[]':set_detail,'planName':'{{ plan_name.0.0 }}','planid':'{{ plan_name.0.1 }}'}
+    });
+    alert('存檔成功 !');
+}
+    </script>
 {% endblock %}
 
 
